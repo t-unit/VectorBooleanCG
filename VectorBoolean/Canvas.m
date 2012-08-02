@@ -7,13 +7,13 @@
 //
 
 #import "Canvas.h"
-#import "NSBezierPath+Utilities.h"
+#import "CGPath_Utilities.h"
 #import "FBBezierCurve.h"
 #import "FBBezierIntersection.h"
 
-static NSRect BoxFrame(NSPoint point)
+static CGRect BoxFrame(CGPoint point)
 {
-    return NSMakeRect(floorf(point.x - 2) - 0.5, floorf(point.y - 2) - 0.5, 5, 5);
+    return CGRectMake(floorf(point.x - 2) - 0.5, floorf(point.y - 2) - 0.5, 5, 5);
 }
 
 @implementation Canvas
@@ -33,16 +33,9 @@ static NSRect BoxFrame(NSPoint point)
     return self;
 }
 
-- (void)dealloc
+- (void) addPath:(CGPathRef)path withColor:(CGColorRef)color
 {
-    [_paths release];
-
-    [super dealloc];
-}
-
-- (void) addPath:(NSBezierPath *)path withColor:(NSColor *)color
-{
-    NSDictionary *object = [NSDictionary dictionaryWithObjectsAndKeys:path, @"path", color, @"color", nil];
+    NSDictionary *object = [NSDictionary dictionaryWithObjectsAndKeys:(__bridge id)(path), @"path", color, @"color", nil];
     [_paths addObject:object];
 }
 
@@ -51,10 +44,10 @@ static NSRect BoxFrame(NSPoint point)
     return [_paths count];
 }
 
-- (NSBezierPath *) pathAtIndex:(NSUInteger)index
+- (CGPathRef) pathAtIndex:(NSUInteger)index
 {
     NSDictionary *object = [_paths objectAtIndex:index];
-    return [object objectForKey:@"path"];
+    return (__bridge CGPathRef)([object objectForKey:@"path"]);
 }
 
 - (void) clear
@@ -62,36 +55,43 @@ static NSRect BoxFrame(NSPoint point)
     [_paths removeAllObjects];
 }
 
-- (void) drawRect:(NSRect)dirtyRect
+- (void) drawRect:(CGRect)dirtyRect
 {
+    // TODO: get current context depending on platform
+    //CGRect cgRect = NSRectToCGRect(dirtyRect);
+    CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+    
     // Draw on a background
     [[NSColor whiteColor] set];
-    [NSBezierPath fillRect:dirtyRect];
+    CGContextFillRect(context, dirtyRect);
     
     // Draw on the objects
     for (NSDictionary *object in _paths) {
-        NSColor *color = [object objectForKey:@"color"];
-        NSBezierPath *path = [object objectForKey:@"path"];
-        [color set];
-        [path fill];
+        CGColorRef color = (__bridge CGColorRef)([object objectForKey:@"color"]);
+        CGPathRef path = (__bridge CGPathRef)([object objectForKey:@"path"]);
+        CGContextSetFillColorWithColor(context, color);
+        CGContextAddPath(context, path);
+        CGContextFillPath(context);
     }    
     
     // Draw on the end and control points
     if ( _showPoints ) {
+        CGContextSetLineWidth(context, 1.0);
+        CGContextSetLineCap(context, kCGLineCapButt);
+        CGContextSetLineJoin(context, kCGLineJoinMiter);
+
         for (NSDictionary *object in _paths) {
-            NSBezierPath *path = [object objectForKey:@"path"];
-            [NSBezierPath setDefaultLineWidth:1.0];
-            [NSBezierPath setDefaultLineCapStyle:NSButtLineCapStyle];
-            [NSBezierPath setDefaultLineJoinStyle:NSMiterLineJoinStyle];
+            CGPathRef path = (__bridge CGPathRef)([object objectForKey:@"path"]);
             
-            for (NSInteger i = 0; i < [path elementCount]; i++) {
-                NSBezierElement element = [path fb_elementAtIndex:i];
+            NSUInteger elementCount = CGPath_FBElementCount(path);
+            for (NSInteger i = 0; i < elementCount; i++) {
+                FBBezierElement element = CGPath_FBElementAtIndex(path, i);
                 [[NSColor orangeColor] set];
-                [NSBezierPath strokeRect:BoxFrame(element.point)];
-                if ( element.kind == NSCurveToBezierPathElement ) {
+                CGContextStrokeRect(context, BoxFrame(element.point));
+                if ( element.kind == kCGPathElementAddCurveToPoint ) {
                     [[NSColor blackColor] set];
-                    [NSBezierPath strokeRect:BoxFrame(element.controlPoints[0])];                    
-                    [NSBezierPath strokeRect:BoxFrame(element.controlPoints[1])];                    
+                    CGContextStrokeRect(context, BoxFrame(element.controlPoints[0]));
+                    CGContextStrokeRect(context, BoxFrame(element.controlPoints[1]));
                 }
             }
         }
@@ -99,8 +99,8 @@ static NSRect BoxFrame(NSPoint point)
 
     // If we have exactly two objects, show where they intersect
     if ( _showIntersections && [_paths count] == 2 ) {
-        NSBezierPath *path1 = [[_paths objectAtIndex:0] objectForKey:@"path"];
-        NSBezierPath *path2 = [[_paths objectAtIndex:1] objectForKey:@"path"];
+        CGPathRef path1 = (__bridge CGPathRef)([[_paths objectAtIndex:0] objectForKey:@"path"]);
+        CGPathRef path2 = (__bridge CGPathRef)([[_paths objectAtIndex:1] objectForKey:@"path"]);
         NSArray *curves1 = [FBBezierCurve bezierCurvesFromBezierPath:path1];
         NSArray *curves2 = [FBBezierCurve bezierCurvesFromBezierPath:path2];
         
@@ -112,8 +112,10 @@ static NSRect BoxFrame(NSPoint point)
                         [[NSColor purpleColor] set];
                     else
                         [[NSColor greenColor] set];
-                    NSBezierPath *circle = [NSBezierPath bezierPathWithOvalInRect:BoxFrame(intersection.location)];
-                    [circle stroke];
+                    CGPathRef circle = CGPathCreateWithEllipseInRect(BoxFrame(intersection.location), NULL);
+                    CGContextAddPath(context, circle);
+                    CGContextStrokePath(context);
+                    CGPathRelease(circle);
                 }
             }
         }

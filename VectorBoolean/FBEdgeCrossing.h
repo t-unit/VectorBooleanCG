@@ -18,11 +18,6 @@
 //  crossing's counterpart in the other FBBezierGraph
 @interface FBEdgeCrossing : NSObject {
     FBBezierIntersection *_intersection;
-    FBContourEdge *_edge;
-    FBEdgeCrossing *_counterpart;
-    BOOL _entry;
-    BOOL _processed;
-    NSUInteger _index;
 }
 
 + (id) crossingWithIntersection:(FBBezierIntersection *)intersection;
@@ -48,6 +43,6 @@
 @property (readonly) FBBezierCurve *rightCurve;
 @property (readonly, getter = isAtStart) BOOL atStart;
 @property (readonly, getter = isAtEnd) BOOL atEnd;
-@property (readonly) NSPoint location;
+@property (readonly) CGPoint location;
 
 @end

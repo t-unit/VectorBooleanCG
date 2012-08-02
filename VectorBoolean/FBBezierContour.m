@@ -28,22 +28,15 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_edges release];
-    
-    [super dealloc];
-}
-
 - (void) addCurve:(FBBezierCurve *)curve
 {
     // Add the curve by wrapping it in an edge
     if ( curve == nil )
         return;
-    FBContourEdge *edge = [[[FBContourEdge alloc] initWithBezierCurve:curve contour:self] autorelease];
+    FBContourEdge *edge = [[FBContourEdge alloc] initWithBezierCurve:curve contour:self];
     edge.index = [_edges count];
     [_edges addObject:edge];
-    _bounds = NSZeroRect; // force the bounds to be recalculated
+    _bounds = CGRectZero; // force the bounds to be recalculated
 }
 
 - (void) addCurveFrom:(FBEdgeCrossing *)startCrossing to:(FBEdgeCrossing *)endCrossing
@@ -92,24 +85,24 @@
     [self addReverseCurve:curve];
 }
 
-- (NSRect) bounds
+- (CGRect) bounds
 {
     // Cache the bounds to save time
-    if ( !NSEqualRects(_bounds, NSZeroRect) )
+    if ( !CGRectEqualToRect(_bounds, CGRectZero) )
         return _bounds;
     
     // If no edges, no bounds
     if ( [_edges count] == 0 )
-        return NSZeroRect;
+        return CGRectZero;
     
     // Start with the first point to set the topLeft and bottom right points
     FBContourEdge *firstEdge = [_edges objectAtIndex:0];
-    NSPoint topLeft = firstEdge.curve.endPoint1;
-    NSPoint bottomRight = topLeft;
+    CGPoint topLeft = firstEdge.curve.endPoint1;
+    CGPoint bottomRight = topLeft;
     
     // All the edges are connected, so only add on based on the second end point
     for (FBContourEdge *edge in _edges) {
-        NSPoint point = edge.curve.endPoint2;
+        CGPoint point = edge.curve.endPoint2;
         if ( point.x < topLeft.x )
             topLeft.x = point.x;
         if ( point.x > bottomRight.x )
@@ -120,26 +113,26 @@
             bottomRight.y = point.y;
     }
     
-    _bounds = NSMakeRect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+    _bounds = CGRectMake(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
 
     return _bounds;
 }
 
-- (NSPoint) firstPoint
+- (CGPoint) firstPoint
 {
     if ( [_edges count] == 0 )
-        return NSZeroPoint;
+        return CGPointZero;
 
     FBContourEdge *edge = [_edges objectAtIndex:0];
     return edge.curve.endPoint1;
 }
 
-- (BOOL) containsPoint:(NSPoint)testPoint
+- (BOOL) containsPoint:(CGPoint)testPoint
 {
     // Create a test line from our point to somewhere outside our graph. We'll see how many times the test
     //  line intersects edges of the graph. Based on the even/odd rule, if it's an odd number, we're inside
     //  the graph, if even, outside.
-    NSPoint lineEndPoint = NSMakePoint(testPoint.x > NSMinX(self.bounds) ? NSMinX(self.bounds) - 10 : NSMaxX(self.bounds) + 10, testPoint.y); /* just move us outside the bounds of the graph */
+    CGPoint lineEndPoint = CGPointMake(testPoint.x > CGRectGetMinX(self.bounds) ? CGRectGetMinX(self.bounds) - 10 : CGRectGetMaxX(self.bounds) + 10, testPoint.y); /* just move us outside the bounds of the graph */
     FBBezierCurve *testCurve = [FBBezierCurve bezierCurveWithLineStartPoint:testPoint endPoint:lineEndPoint];
     
     NSUInteger intersectCount = 0;
@@ -225,8 +218,8 @@
 {
     return [NSString stringWithFormat:@"<%@: bounds = (%f, %f)(%f, %f) edges = %@>", 
             NSStringFromClass([self class]),
-            NSMinX(self.bounds), NSMinY(self.bounds),
-            NSWidth(self.bounds), NSHeight(self.bounds),
+            CGRectGetMinX(self.bounds), CGRectGetMinY(self.bounds),
+            CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds),
             FBArrayDescription(_edges)
             ];
 }

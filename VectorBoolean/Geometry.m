@@ -11,31 +11,31 @@
 static const CGFloat FBPointClosenessThreshold = 1e-10;
 
 
-CGFloat FBDistanceBetweenPoints(NSPoint point1, NSPoint point2)
+CGFloat FBDistanceBetweenPoints(CGPoint point1, CGPoint point2)
 {
     CGFloat xDelta = point2.x - point1.x;
     CGFloat yDelta = point2.y - point1.y;
     return sqrtf(xDelta * xDelta + yDelta * yDelta);
 }
 
-CGFloat FBDistancePointToLine(NSPoint point, NSPoint lineStartPoint, NSPoint lineEndPoint)
+CGFloat FBDistancePointToLine(CGPoint point, CGPoint lineStartPoint, CGPoint lineEndPoint)
 {
     CGFloat lineLength = FBDistanceBetweenPoints(lineStartPoint, lineEndPoint);
     if ( lineLength == 0 )
         return 0;
     CGFloat u = ((point.x - lineStartPoint.x) * (lineEndPoint.x - lineStartPoint.x) + (point.y - lineStartPoint.y) * (lineEndPoint.y - lineStartPoint.y)) / (lineLength * lineLength);
-    NSPoint intersectionPoint = NSMakePoint(lineStartPoint.x + u * (lineEndPoint.x - lineStartPoint.x), lineStartPoint.y + u * (lineEndPoint.y - lineStartPoint.y));
+    CGPoint intersectionPoint = CGPointMake(lineStartPoint.x + u * (lineEndPoint.x - lineStartPoint.x), lineStartPoint.y + u * (lineEndPoint.y - lineStartPoint.y));
     return FBDistanceBetweenPoints(point, intersectionPoint);
 }
 
-NSPoint FBAddPoint(NSPoint point1, NSPoint point2)
+CGPoint FBAddPoint(CGPoint point1, CGPoint point2)
 {
-    return NSMakePoint(point1.x + point2.x, point1.y + point2.y);
+    return CGPointMake(point1.x + point2.x, point1.y + point2.y);
 }
 
-NSPoint FBUnitScalePoint(NSPoint point, CGFloat scale)
+CGPoint FBUnitScalePoint(CGPoint point, CGFloat scale)
 {
-    NSPoint result = point;
+    CGPoint result = point;
     CGFloat length = FBPointLength(point);
     if ( length != 0.0 ) {
         result.x *= scale/length;
@@ -44,34 +44,34 @@ NSPoint FBUnitScalePoint(NSPoint point, CGFloat scale)
     return result;
 }
 
-NSPoint FBScalePoint(NSPoint point, CGFloat scale)
+CGPoint FBScalePoint(CGPoint point, CGFloat scale)
 {
-    return NSMakePoint(point.x * scale, point.y * scale);
+    return CGPointMake(point.x * scale, point.y * scale);
 }
 
-CGFloat FBDotMultiplyPoint(NSPoint point1, NSPoint point2)
+CGFloat FBDotMultiplyPoint(CGPoint point1, CGPoint point2)
 {
     return point1.x * point2.x + point1.y * point2.y;
 }
 
-NSPoint FBSubtractPoint(NSPoint point1, NSPoint point2)
+CGPoint FBSubtractPoint(CGPoint point1, CGPoint point2)
 {
-    return NSMakePoint(point1.x - point2.x, point1.y - point2.y);
+    return CGPointMake(point1.x - point2.x, point1.y - point2.y);
 }
 
-CGFloat FBPointLength(NSPoint point)
+CGFloat FBPointLength(CGPoint point)
 {
     return sqrtf((point.x * point.x) + (point.y * point.y));
 }
 
-CGFloat FBPointSquaredLength(NSPoint point)
+CGFloat FBPointSquaredLength(CGPoint point)
 {
     return (point.x * point.x) + (point.y * point.y);
 }
 
-NSPoint FBNormalizePoint(NSPoint point)
+CGPoint FBNormalizePoint(CGPoint point)
 {
-    NSPoint result = point;
+    CGPoint result = point;
     CGFloat length = FBPointLength(point);
     if ( length != 0.0 ) {
         result.x /= length;
@@ -80,35 +80,35 @@ NSPoint FBNormalizePoint(NSPoint point)
     return result;
 }
 
-NSPoint FBNegatePoint(NSPoint point)
+CGPoint FBNegatePoint(CGPoint point)
 {
-    return NSMakePoint(-point.x, -point.y);
+    return CGPointMake(-point.x, -point.y);
 }
 
-NSPoint FBRoundPoint(NSPoint point)
+CGPoint FBRoundPoint(CGPoint point)
 {
-    NSPoint result = { roundf(point.x), roundf(point.y) };
+    CGPoint result = { roundf(point.x), roundf(point.y) };
     return result;
 }
 
-NSPoint FBLineNormal(NSPoint lineStart, NSPoint lineEnd)
+CGPoint FBLineNormal(CGPoint lineStart, CGPoint lineEnd)
 {
-    return FBNormalizePoint(NSMakePoint(-(lineEnd.y - lineStart.y), lineEnd.x - lineStart.x));
+    return FBNormalizePoint(CGPointMake(-(lineEnd.y - lineStart.y), lineEnd.x - lineStart.x));
 }
 
-NSPoint FBLineMidpoint(NSPoint lineStart, NSPoint lineEnd)
+CGPoint FBLineMidpoint(CGPoint lineStart, CGPoint lineEnd)
 {
     CGFloat distance = FBDistanceBetweenPoints(lineStart, lineEnd);
-    NSPoint tangent = FBNormalizePoint(FBSubtractPoint(lineEnd, lineStart));
+    CGPoint tangent = FBNormalizePoint(FBSubtractPoint(lineEnd, lineStart));
     return FBAddPoint(lineStart, FBUnitScalePoint(tangent, distance / 2.0));
 }
 
-BOOL FBArePointsClose(NSPoint point1, NSPoint point2)
+BOOL FBArePointsClose(CGPoint point1, CGPoint point2)
 {
     return FBArePointsCloseWithOptions(point1, point2, FBPointClosenessThreshold);
 }
 
-BOOL FBArePointsCloseWithOptions(NSPoint point1, NSPoint point2, CGFloat threshold)
+BOOL FBArePointsCloseWithOptions(CGPoint point1, CGPoint point2, CGFloat threshold)
 {
     return FBAreValuesCloseWithOptions(point1.x, point2.x, threshold) && FBAreValuesCloseWithOptions(point1.y, point2.y, threshold);
 }

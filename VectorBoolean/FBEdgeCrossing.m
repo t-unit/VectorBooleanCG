@@ -13,15 +13,9 @@
 
 @implementation FBEdgeCrossing
 
-@synthesize edge=_edge;
-@synthesize counterpart=_counterpart;
-@synthesize entry=_entry;
-@synthesize processed=_processed;
-@synthesize index=_index;
-
 + (id) crossingWithIntersection:(FBBezierIntersection *)intersection
 {
-    return [[[FBEdgeCrossing alloc] initWithIntersection:intersection] autorelease];
+    return [[FBEdgeCrossing alloc] initWithIntersection:intersection];
 }
 
 - (id) initWithIntersection:(FBBezierIntersection *)intersection
@@ -29,17 +23,10 @@
     self = [super init];
     
     if ( self != nil ) {
-        _intersection = [intersection retain];
+        _intersection = intersection;
     }
     
     return self;
-}
-
-- (void)dealloc
-{
-    [_intersection release];
-    
-    [super dealloc];
 }
 
 - (void) removeFromEdge
@@ -76,7 +63,7 @@
     return _intersection.parameter2;
 }
 
-- (NSPoint) location
+- (CGPoint) location
 {
     return _intersection.location;
 }

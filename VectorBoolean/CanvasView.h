@@ -6,11 +6,15 @@
 //  Copyright 2011 Fortunate Bear, LLC. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
-
 @class Canvas;
 
-@interface CanvasView : NSView {
+#if TARGET_OS_IPHONE
+#define MWKC_MAIN_VIEW_CLASS UIView
+#else
+#define MWKC_MAIN_VIEW_CLASS NSView
+#endif
+
+@interface CanvasView : MWKC_MAIN_VIEW_CLASS {
     Canvas *_canvas;    
 }
 

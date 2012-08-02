@@ -11,6 +11,11 @@
 #import "Geometry.h"
 
 @interface FBBezierIntersection ()
+{
+    BOOL _tangent;
+    BOOL _needToComputeCurve1;
+    BOOL _needToComputeCurve2;
+}
 
 - (void) computeCurve1;
 - (void) computeCurve2;
@@ -19,14 +24,15 @@
 
 @implementation FBBezierIntersection
 
-@synthesize curve1=_curve1;
-@synthesize parameter1=_parameter1;
-@synthesize curve2=_curve2;
-@synthesize parameter2=_parameter2;
+@synthesize location = _location;
+@synthesize curve1LeftBezier = _curve1LeftBezier;
+@synthesize curve1RightBezier = _curve1RightBezier;
+@synthesize curve2LeftBezier = _curve2LeftBezier;
+@synthesize curve2RightBezier = _curve2RightBezier;
 
 + (id) intersectionWithCurve1:(FBBezierCurve *)curve1 parameter1:(CGFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(CGFloat)parameter2
 {
-    return [[[FBBezierIntersection alloc] initWithCurve1:curve1 parameter1:parameter1 curve2:curve2 parameter2:parameter2] autorelease];
+    return [[FBBezierIntersection alloc] initWithCurve1:curve1 parameter1:parameter1 curve2:curve2 parameter2:parameter2];
 }
 
 - (id) initWithCurve1:(FBBezierCurve *)curve1 parameter1:(CGFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(CGFloat)parameter2
@@ -34,9 +40,9 @@
     self = [super init];
     
     if ( self != nil ) {
-        _curve1 = [curve1 retain];
+        _curve1 = curve1;
         _parameter1 = parameter1;
-        _curve2 = [curve2 retain];
+        _curve2 = curve2;
         _parameter2 = parameter2;
         _needToComputeCurve1 = YES;
         _needToComputeCurve2 = YES;
@@ -45,19 +51,7 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_curve1 release];
-    [_curve2 release];
-    [_curve1LeftBezier release];
-    [_curve1RightBezier release];
-    [_curve2LeftBezier release];
-    [_curve2RightBezier release];
-    
-    [super dealloc];
-}
-
-- (NSPoint) location
+- (CGPoint) location
 {
     [self computeCurve1];
     return _location;
@@ -75,10 +69,10 @@
     static const CGFloat FBPointCloseThreshold = 1e-7;
     
     // Compute the tangents at the intersection. 
-    NSPoint curve1LeftTangent = FBNormalizePoint(FBSubtractPoint(_curve1LeftBezier.controlPoint2, _curve1LeftBezier.endPoint2));
-    NSPoint curve1RightTangent = FBNormalizePoint(FBSubtractPoint(_curve1RightBezier.controlPoint1, _curve1RightBezier.endPoint1));
-    NSPoint curve2LeftTangent = FBNormalizePoint(FBSubtractPoint(_curve2LeftBezier.controlPoint2, _curve2LeftBezier.endPoint2));
-    NSPoint curve2RightTangent = FBNormalizePoint(FBSubtractPoint(_curve2RightBezier.controlPoint1, _curve2RightBezier.endPoint1));
+    CGPoint curve1LeftTangent = FBNormalizePoint(FBSubtractPoint(_curve1LeftBezier.controlPoint2, _curve1LeftBezier.endPoint2));
+    CGPoint curve1RightTangent = FBNormalizePoint(FBSubtractPoint(_curve1RightBezier.controlPoint1, _curve1RightBezier.endPoint1));
+    CGPoint curve2LeftTangent = FBNormalizePoint(FBSubtractPoint(_curve2LeftBezier.controlPoint2, _curve2LeftBezier.endPoint2));
+    CGPoint curve2RightTangent = FBNormalizePoint(FBSubtractPoint(_curve2RightBezier.controlPoint1, _curve2RightBezier.endPoint1));
         
     // See if the tangents are the same. If so, then we're tangent at the intersection point
     return FBArePointsCloseWithOptions(curve1LeftTangent, curve2LeftTangent, FBPointCloseThreshold) || FBArePointsCloseWithOptions(curve1LeftTangent, curve2RightTangent, FBPointCloseThreshold) || FBArePointsCloseWithOptions(curve1RightTangent, curve2LeftTangent, FBPointCloseThreshold) || FBArePointsCloseWithOptions(curve1RightTangent, curve2RightTangent, FBPointCloseThreshold);
@@ -148,9 +142,12 @@
     if ( !_needToComputeCurve1 )
         return;
     
-    _location = [_curve1 pointAtParameter:_parameter1 leftBezierCurve:&_curve1LeftBezier rightBezierCurve:&_curve1RightBezier];
-    [_curve1LeftBezier retain];
-    [_curve1RightBezier retain];
+    // Use local variables to make this work with ARC.
+    FBBezierCurve *localBezier1;
+    FBBezierCurve *localBezier2;
+    _location = [_curve1 pointAtParameter:_parameter1 leftBezierCurve:&localBezier1 rightBezierCurve:&localBezier2];
+    _curve1LeftBezier = localBezier1;
+    _curve1RightBezier = localBezier2;
     
     _needToComputeCurve1 = NO;
 }
@@ -160,9 +157,12 @@
     if ( !_needToComputeCurve2 )
         return;
     
-    [_curve2 pointAtParameter:_parameter2 leftBezierCurve:&_curve2LeftBezier rightBezierCurve:&_curve2RightBezier];
-    [_curve2LeftBezier retain];
-    [_curve2RightBezier retain];
+    // Use local variables to make this work with ARC.
+    FBBezierCurve *localBezier1;
+    FBBezierCurve *localBezier2;
+    [_curve2 pointAtParameter:_parameter2 leftBezierCurve:&localBezier1 rightBezierCurve:&localBezier2];
+    _curve2LeftBezier = localBezier1;
+    _curve2RightBezier = localBezier2;
     
     _needToComputeCurve2 = NO;
 }

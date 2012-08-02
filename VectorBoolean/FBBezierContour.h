@@ -20,7 +20,7 @@ typedef enum FBContourInside {
 //  can be filled or represent a hole in another contour.
 @interface FBBezierContour : NSObject<NSCopying> {
     NSMutableArray *_edges;
-    NSRect _bounds;
+    CGRect _bounds;
     FBContourInside _inside;
 }
 
@@ -32,14 +32,14 @@ typedef enum FBContourInside {
 - (void) addReverseCurve:(FBBezierCurve *)curve;
 - (void) addReverseCurveFrom:(FBEdgeCrossing *)startCrossing to:(FBEdgeCrossing *)endCrossing;
 
-- (BOOL) containsPoint:(NSPoint)point;
+- (BOOL) containsPoint:(CGPoint)point;
 - (void) markCrossingsAsEntryOrExitWithContour:(FBBezierContour *)otherContour markInside:(BOOL)markInside;
 
 - (void) round;
 
 @property (readonly) NSArray *edges;
-@property (readonly) NSRect bounds;
-@property (readonly) NSPoint firstPoint;
+@property (readonly) CGRect bounds;
+@property (readonly) CGPoint firstPoint;
 @property FBContourInside inside;
 @property (readonly) NSArray *intersectingContours;
 

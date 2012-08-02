@@ -8,6 +8,7 @@
 
 #import "FBContourEdge.h"
 #import "FBEdgeCrossing.h"
+#import "FBBezierCurve.h"
 #import "FBBezierContour.h"
 #import "FBDebug.h"
 
@@ -19,32 +20,17 @@
 
 @implementation FBContourEdge
 
-@synthesize curve=_curve;
-@synthesize crossings=_crossings;
-@synthesize index=_index;
-@synthesize contour=_contour;
-@synthesize startShared=_startShared;
-@synthesize stopShared=_stopShared;
 
 - (id) initWithBezierCurve:(FBBezierCurve *)curve contour:(FBBezierContour *)contour
 {
     self = [super init];
     
     if ( self != nil ) {
-        _curve = [curve retain];
         _crossings = [[NSMutableArray alloc] initWithCapacity:4];
         _contour = contour; // no cyclical references
     }
     
     return self;
-}
-
-- (void)dealloc
-{
-    [_crossings release];
-    [_curve release];
-    
-    [super dealloc];
 }
 
 - (void) addCrossing:(FBEdgeCrossing *)crossing

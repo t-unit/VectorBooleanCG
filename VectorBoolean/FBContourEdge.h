@@ -14,20 +14,13 @@
 
 // FBContourEdge wraps a bezier curve, and additionally, stores all the places
 //  on the curve where crossings happen.
-@interface FBContourEdge : NSObject {
-    FBBezierCurve *_curve;
-    NSMutableArray *_crossings; // sorted by parameter of the intersection
-    FBBezierContour *_contour;
-    NSUInteger _index;
-    BOOL _startShared;
-    BOOL _stopShared;
-}
+@interface FBContourEdge : NSObject
 
 - (id) initWithBezierCurve:(FBBezierCurve *)curve contour:(FBBezierContour *)contour;
 
 @property (readonly) FBBezierCurve *curve;
-@property (readonly) NSArray *crossings;
-@property (readonly, assign) FBBezierContour *contour;
+@property (readonly) NSMutableArray *crossings; // sorted by parameter of the intersection
+@property (readonly, weak) FBBezierContour *contour;
 @property NSUInteger index;
 
 // An easy way to iterate all the edges. Wraps around.

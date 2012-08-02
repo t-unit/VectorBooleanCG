@@ -6,26 +6,24 @@
 //  Copyright 2011 Fortunate Bear, LLC. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
 
+CGFloat FBDistanceBetweenPoints(CGPoint point1, CGPoint point2);
+CGFloat FBDistancePointToLine(CGPoint point, CGPoint lineStartPoint, CGPoint lineEndPoint);
+CGPoint FBLineNormal(CGPoint lineStart, CGPoint lineEnd);
+CGPoint FBLineMidpoint(CGPoint lineStart, CGPoint lineEnd);
 
-CGFloat FBDistanceBetweenPoints(NSPoint point1, NSPoint point2);
-CGFloat FBDistancePointToLine(NSPoint point, NSPoint lineStartPoint, NSPoint lineEndPoint);
-NSPoint FBLineNormal(NSPoint lineStart, NSPoint lineEnd);
-NSPoint FBLineMidpoint(NSPoint lineStart, NSPoint lineEnd);
+CGPoint FBAddPoint(CGPoint point1, CGPoint point2);
+CGPoint FBScalePoint(CGPoint point, CGFloat scale);
+CGPoint FBUnitScalePoint(CGPoint point, CGFloat scale);
+CGPoint FBSubtractPoint(CGPoint point1, CGPoint point2);
+CGFloat FBDotMultiplyPoint(CGPoint point1, CGPoint point2);
+CGFloat FBPointLength(CGPoint point);
+CGFloat FBPointSquaredLength(CGPoint point);
+CGPoint FBNormalizePoint(CGPoint point);
+CGPoint FBNegatePoint(CGPoint point);
+CGPoint FBRoundPoint(CGPoint point);
 
-NSPoint FBAddPoint(NSPoint point1, NSPoint point2);
-NSPoint FBScalePoint(NSPoint point, CGFloat scale);
-NSPoint FBUnitScalePoint(NSPoint point, CGFloat scale);
-NSPoint FBSubtractPoint(NSPoint point1, NSPoint point2);
-CGFloat FBDotMultiplyPoint(NSPoint point1, NSPoint point2);
-CGFloat FBPointLength(NSPoint point);
-CGFloat FBPointSquaredLength(NSPoint point);
-NSPoint FBNormalizePoint(NSPoint point);
-NSPoint FBNegatePoint(NSPoint point);
-NSPoint FBRoundPoint(NSPoint point);
-
-BOOL FBArePointsClose(NSPoint point1, NSPoint point2);
-BOOL FBArePointsCloseWithOptions(NSPoint point1, NSPoint point2, CGFloat threshold);
+BOOL FBArePointsClose(CGPoint point1, CGPoint point2);
+BOOL FBArePointsCloseWithOptions(CGPoint point1, CGPoint point2, CGFloat threshold);
 BOOL FBAreValuesClose(CGFloat value1, CGFloat value2);
 BOOL FBAreValuesCloseWithOptions(CGFloat value1, CGFloat value2, CGFloat threshold);

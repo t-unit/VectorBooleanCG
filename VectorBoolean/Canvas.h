@@ -15,13 +15,13 @@
     BOOL _showIntersections;
 }
 
-- (void) addPath:(NSBezierPath *)path withColor:(NSColor *)color;
+- (void) addPath:(CGPathRef)path withColor:(CGColorRef)color;
 - (void) clear;
 
 - (NSUInteger) numberOfPaths;
-- (NSBezierPath *) pathAtIndex:(NSUInteger)index;
+- (CGPathRef) pathAtIndex:(NSUInteger)index;
 
-- (void) drawRect:(NSRect)dirtyRect;
+- (void) drawRect:(CGRect)dirtyRect;
 
 @property BOOL showPoints;
 @property BOOL showIntersections;
