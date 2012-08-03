@@ -3,6 +3,7 @@
 //  VectorBoolean
 //
 //  Created by Andrew Finnell on 5/31/11.
+//  Adapted for cross-platform use by Martin Winter on 2012-08-03.
 //  Copyright 2011 Fortunate Bear, LLC. All rights reserved.
 //
 
@@ -10,6 +11,14 @@
 #import "CGPath_Utilities.h"
 #import "FBBezierCurve.h"
 #import "FBBezierIntersection.h"
+
+
+#if TARGET_OS_IPHONE
+#define COLOR_CLASS     UIColor
+#else
+#define COLOR_CLASS     NSColor
+#endif
+
 
 static CGRect BoxFrame(CGPoint point)
 {
@@ -55,15 +64,10 @@ static CGRect BoxFrame(CGPoint point)
     [_paths removeAllObjects];
 }
 
-- (void) drawRect:(CGRect)dirtyRect
+- (void) drawRect:(CGRect)dirtyRect inContext:(CGContextRef)context
 {
-    // TODO: get current context depending on platform!
-    
-    //CGRect cgRect = NSRectToCGRect(dirtyRect);
-    CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
-    
     // Draw on a background
-    [[NSColor whiteColor] set];
+    [[COLOR_CLASS whiteColor] set];
     CGContextFillRect(context, dirtyRect);
     
     // Draw on the objects
@@ -87,10 +91,10 @@ static CGRect BoxFrame(CGPoint point)
             NSUInteger elementCount = CGPath_MWElementCount(path);
             for (NSInteger i = 0; i < elementCount; i++) {
                 FBBezierElement element = CGPath_FBElementAtIndex(path, i);
-                [[NSColor orangeColor] set];
+                [[COLOR_CLASS orangeColor] set];
                 CGContextStrokeRect(context, BoxFrame(element.point));
                 if ( element.kind == kCGPathElementAddCurveToPoint ) {
-                    [[NSColor blackColor] set];
+                    [[COLOR_CLASS blackColor] set];
                     CGContextStrokeRect(context, BoxFrame(element.controlPoints[0]));
                     CGContextStrokeRect(context, BoxFrame(element.controlPoints[1]));
                 }
@@ -110,9 +114,9 @@ static CGRect BoxFrame(CGPoint point)
                 NSArray *intersections = [curve1 intersectionsWithBezierCurve:curve2];
                 for (FBBezierIntersection *intersection in intersections) {
                     if ( intersection.isTangent )
-                        [[NSColor purpleColor] set];
+                        [[COLOR_CLASS purpleColor] set];
                     else
-                        [[NSColor greenColor] set];
+                        [[COLOR_CLASS greenColor] set];
                     CGPathRef circle = CGPathCreateWithEllipseInRect(BoxFrame(intersection.location), NULL);
                     CGContextAddPath(context, circle);
                     CGContextStrokePath(context);

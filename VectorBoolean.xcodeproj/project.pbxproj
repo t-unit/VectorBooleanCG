@@ -12,7 +12,7 @@
 		697B1F8C15CB09D100B39D76 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 697B1F8B15CB09D100B39D76 /* CoreGraphics.framework */; };
 		697B1F9215CB09D100B39D76 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 697B1F9015CB09D100B39D76 /* InfoPlist.strings */; };
 		697B1F9415CB09D100B39D76 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 697B1F9315CB09D100B39D76 /* main.m */; };
-		697B1F9815CB09D100B39D76 /* MWAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 697B1F9715CB09D100B39D76 /* MWAppDelegate.m */; };
+		697B1F9815CB09D100B39D76 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 697B1F9715CB09D100B39D76 /* AppDelegate.m */; };
 		697B1F9B15CB09D100B39D76 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 697B1F9915CB09D100B39D76 /* MainStoryboard_iPhone.storyboard */; };
 		697B1F9E15CB09D100B39D76 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 697B1F9C15CB09D100B39D76 /* MainStoryboard_iPad.storyboard */; };
 		697B1FA115CB09D100B39D76 /* MWViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 697B1FA015CB09D100B39D76 /* MWViewController.m */; };
@@ -41,6 +41,14 @@
 		69879B0D15CBD7AC000520AA /* Geometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879AF515CBD7AC000520AA /* Geometry.m */; };
 		69879B0E15CBD7AC000520AA /* MWPointValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879AF715CBD7AC000520AA /* MWPointValue.m */; };
 		69879B0F15CBD7AC000520AA /* MWPointValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879AF715CBD7AC000520AA /* MWPointValue.m */; };
+		69879B2215CBE249000520AA /* CanvasView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879B2115CBE249000520AA /* CanvasView.m */; };
+		69879B2515CBE256000520AA /* CanvasView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879B2415CBE256000520AA /* CanvasView.m */; };
+		69879B2815CBF676000520AA /* CanvasController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879B2715CBF676000520AA /* CanvasController.m */; };
+		69879B2915CBF676000520AA /* CanvasController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879B2715CBF676000520AA /* CanvasController.m */; };
+		69879B2C15CBFD73000520AA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879B2B15CBFD73000520AA /* AppDelegate.m */; };
+		699EB2B215CC111000F387FB /* MWShapesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 699EB2B115CC111000F387FB /* MWShapesTableViewController.m */; };
+		699EB2B915CC195D00F387FB /* MWOperationsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 699EB2B815CC195D00F387FB /* MWOperationsTableViewController.m */; };
+		699EB2C415CC24E200F387FB /* MWOptionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 699EB2C315CC24E200F387FB /* MWOptionsTableViewController.m */; };
 		A1C48B381395FA380043E2C7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1C48B371395FA380043E2C7 /* Cocoa.framework */; };
 		A1C48B421395FA390043E2C7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1C48B401395FA390043E2C7 /* InfoPlist.strings */; };
 		A1C48B451395FA390043E2C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A1C48B441395FA390043E2C7 /* main.m */; };
@@ -48,7 +56,6 @@
 		A1C48B4B1395FA390043E2C7 /* MyDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = A1C48B4A1395FA390043E2C7 /* MyDocument.m */; };
 		A1C48B4E1395FA390043E2C7 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1C48B4C1395FA390043E2C7 /* MyDocument.xib */; };
 		A1C48B511395FA390043E2C7 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1C48B4F1395FA390043E2C7 /* MainMenu.xib */; };
-		A1C48B65139602480043E2C7 /* CanvasView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1C48B64139602480043E2C7 /* CanvasView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,8 +67,8 @@
 		697B1F9115CB09D100B39D76 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		697B1F9315CB09D100B39D76 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		697B1F9515CB09D100B39D76 /* VectorBooleanMobile-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VectorBooleanMobile-Prefix.pch"; sourceTree = "<group>"; };
-		697B1F9615CB09D100B39D76 /* MWAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWAppDelegate.h; sourceTree = "<group>"; };
-		697B1F9715CB09D100B39D76 /* MWAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MWAppDelegate.m; sourceTree = "<group>"; };
+		697B1F9615CB09D100B39D76 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		697B1F9715CB09D100B39D76 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		697B1F9A15CB09D100B39D76 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		697B1F9D15CB09D100B39D76 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		697B1F9F15CB09D100B39D76 /* MWViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWViewController.h; sourceTree = "<group>"; };
@@ -91,6 +98,20 @@
 		69879AF515CBD7AC000520AA /* Geometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Geometry.m; path = Shared/Geometry.m; sourceTree = "<group>"; };
 		69879AF615CBD7AC000520AA /* MWPointValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWPointValue.h; path = Shared/MWPointValue.h; sourceTree = "<group>"; };
 		69879AF715CBD7AC000520AA /* MWPointValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWPointValue.m; path = Shared/MWPointValue.m; sourceTree = "<group>"; };
+		69879B2015CBE249000520AA /* CanvasView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasView.h; sourceTree = "<group>"; };
+		69879B2115CBE249000520AA /* CanvasView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasView.m; sourceTree = "<group>"; };
+		69879B2315CBE256000520AA /* CanvasView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasView.h; sourceTree = "<group>"; };
+		69879B2415CBE256000520AA /* CanvasView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasView.m; sourceTree = "<group>"; };
+		69879B2615CBF676000520AA /* CanvasController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CanvasController.h; path = Shared/CanvasController.h; sourceTree = "<group>"; };
+		69879B2715CBF676000520AA /* CanvasController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CanvasController.m; path = Shared/CanvasController.m; sourceTree = "<group>"; };
+		69879B2A15CBFD73000520AA /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		69879B2B15CBFD73000520AA /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		699EB2B015CC111000F387FB /* MWShapesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWShapesTableViewController.h; sourceTree = "<group>"; };
+		699EB2B115CC111000F387FB /* MWShapesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWShapesTableViewController.m; sourceTree = "<group>"; };
+		699EB2B715CC195D00F387FB /* MWOperationsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWOperationsTableViewController.h; sourceTree = "<group>"; };
+		699EB2B815CC195D00F387FB /* MWOperationsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWOperationsTableViewController.m; sourceTree = "<group>"; };
+		699EB2C215CC24E200F387FB /* MWOptionsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWOptionsTableViewController.h; sourceTree = "<group>"; };
+		699EB2C315CC24E200F387FB /* MWOptionsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWOptionsTableViewController.m; sourceTree = "<group>"; };
 		A1C48B331395FA380043E2C7 /* VectorBoolean.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VectorBoolean.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1C48B371395FA380043E2C7 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		A1C48B3A1395FA390043E2C7 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -105,8 +126,6 @@
 		A1C48B4A1395FA390043E2C7 /* MyDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyDocument.m; sourceTree = "<group>"; };
 		A1C48B4D1395FA390043E2C7 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
 		A1C48B501395FA390043E2C7 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		A1C48B63139602480043E2C7 /* CanvasView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasView.h; sourceTree = "<group>"; };
-		A1C48B64139602480043E2C7 /* CanvasView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,12 +154,20 @@
 		697B1F8D15CB09D100B39D76 /* VectorBooleanMobile */ = {
 			isa = PBXGroup;
 			children = (
-				697B1F9615CB09D100B39D76 /* MWAppDelegate.h */,
-				697B1F9715CB09D100B39D76 /* MWAppDelegate.m */,
+				69879B2315CBE256000520AA /* CanvasView.h */,
+				69879B2415CBE256000520AA /* CanvasView.m */,
+				697B1F9615CB09D100B39D76 /* AppDelegate.h */,
+				697B1F9715CB09D100B39D76 /* AppDelegate.m */,
 				697B1F9915CB09D100B39D76 /* MainStoryboard_iPhone.storyboard */,
 				697B1F9C15CB09D100B39D76 /* MainStoryboard_iPad.storyboard */,
 				697B1F9F15CB09D100B39D76 /* MWViewController.h */,
 				697B1FA015CB09D100B39D76 /* MWViewController.m */,
+				699EB2B015CC111000F387FB /* MWShapesTableViewController.h */,
+				699EB2B115CC111000F387FB /* MWShapesTableViewController.m */,
+				699EB2B715CC195D00F387FB /* MWOperationsTableViewController.h */,
+				699EB2B815CC195D00F387FB /* MWOperationsTableViewController.m */,
+				699EB2C215CC24E200F387FB /* MWOptionsTableViewController.h */,
+				699EB2C315CC24E200F387FB /* MWOptionsTableViewController.m */,
 				697B1F8E15CB09D100B39D76 /* Supporting Files */,
 			);
 			path = VectorBooleanMobile;
@@ -182,6 +209,8 @@
 			children = (
 				69879AE015CBD7AC000520AA /* Canvas.h */,
 				69879AE115CBD7AC000520AA /* Canvas.m */,
+				69879B2615CBF676000520AA /* CanvasController.h */,
+				69879B2715CBF676000520AA /* CanvasController.m */,
 				69879AF415CBD7AC000520AA /* Geometry.h */,
 				69879AF515CBD7AC000520AA /* Geometry.m */,
 				69879AEA15CBD7AC000520AA /* FBBezierGraph.h */,
@@ -250,10 +279,12 @@
 		A1C48B3D1395FA390043E2C7 /* VectorBoolean */ = {
 			isa = PBXGroup;
 			children = (
+				69879B2015CBE249000520AA /* CanvasView.h */,
+				69879B2115CBE249000520AA /* CanvasView.m */,
+				69879B2A15CBFD73000520AA /* AppDelegate.h */,
+				69879B2B15CBFD73000520AA /* AppDelegate.m */,
 				A1C48B491395FA390043E2C7 /* MyDocument.h */,
 				A1C48B4A1395FA390043E2C7 /* MyDocument.m */,
-				A1C48B63139602480043E2C7 /* CanvasView.h */,
-				A1C48B64139602480043E2C7 /* CanvasView.m */,
 				A1C48B4C1395FA390043E2C7 /* MyDocument.xib */,
 				A1C48B4F1395FA390043E2C7 /* MainMenu.xib */,
 				A1C48B3E1395FA390043E2C7 /* Supporting Files */,
@@ -367,7 +398,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				697B1F9415CB09D100B39D76 /* main.m in Sources */,
-				697B1F9815CB09D100B39D76 /* MWAppDelegate.m in Sources */,
+				697B1F9815CB09D100B39D76 /* AppDelegate.m in Sources */,
 				697B1FA115CB09D100B39D76 /* MWViewController.m in Sources */,
 				69879AF915CBD7AC000520AA /* Canvas.m in Sources */,
 				69879AFB15CBD7AC000520AA /* CGPath_Boolean.m in Sources */,
@@ -381,6 +412,11 @@
 				69879B0B15CBD7AC000520AA /* FBEdgeCrossing.m in Sources */,
 				69879B0D15CBD7AC000520AA /* Geometry.m in Sources */,
 				69879B0F15CBD7AC000520AA /* MWPointValue.m in Sources */,
+				69879B2515CBE256000520AA /* CanvasView.m in Sources */,
+				69879B2915CBF676000520AA /* CanvasController.m in Sources */,
+				699EB2B215CC111000F387FB /* MWShapesTableViewController.m in Sources */,
+				699EB2B915CC195D00F387FB /* MWOperationsTableViewController.m in Sources */,
+				699EB2C415CC24E200F387FB /* MWOptionsTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,7 +426,6 @@
 			files = (
 				A1C48B451395FA390043E2C7 /* main.m in Sources */,
 				A1C48B4B1395FA390043E2C7 /* MyDocument.m in Sources */,
-				A1C48B65139602480043E2C7 /* CanvasView.m in Sources */,
 				69879AF815CBD7AC000520AA /* Canvas.m in Sources */,
 				69879AFA15CBD7AC000520AA /* CGPath_Boolean.m in Sources */,
 				69879AFC15CBD7AC000520AA /* CGPath_Utilities.m in Sources */,
@@ -403,6 +438,9 @@
 				69879B0A15CBD7AC000520AA /* FBEdgeCrossing.m in Sources */,
 				69879B0C15CBD7AC000520AA /* Geometry.m in Sources */,
 				69879B0E15CBD7AC000520AA /* MWPointValue.m in Sources */,
+				69879B2215CBE249000520AA /* CanvasView.m in Sources */,
+				69879B2815CBF676000520AA /* CanvasController.m in Sources */,
+				69879B2C15CBFD73000520AA /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,7 +529,7 @@
 				);
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				INFOPLIST_FILE = "VectorBooleanMobile/VectorBooleanMobile-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -517,7 +555,7 @@
 				GCC_PREFIX_HEADER = "VectorBooleanMobile/VectorBooleanMobile-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				INFOPLIST_FILE = "VectorBooleanMobile/VectorBooleanMobile-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -530,7 +568,7 @@
 		A1C48B521395FA390043E2C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -542,14 +580,14 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
 		A1C48B531395FA390043E2C7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -557,7 +595,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				SDKROOT = macosx;
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};

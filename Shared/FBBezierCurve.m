@@ -719,8 +719,12 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     [results addObject:[points objectAtIndex:0]];
     [results addObject:[points objectAtIndex:1]];
     NSUInteger i = 2;
-    while ( i < [points count] ) {
+    NSUInteger pointsCount = [points count];
+    while ( i < pointsCount ) {
         CGPoint lastPoint = [(MWPointValue *)[results lastObject] point];
+        
+        // TODO: sometimes there is only one point left in results, which leads to a crash. This never happens on OS X!
+        
         CGPoint nextToLastPoint = [(MWPointValue *)[results objectAtIndex:[results count] - 2] point];
         CGPoint pointUnderConsideration = [(MWPointValue *)[points objectAtIndex:i] point];
         CGFloat area = CounterClockwiseTurn(nextToLastPoint, lastPoint, pointUnderConsideration);
@@ -728,12 +732,13 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
             // Turning left is good, so keep going
             [results addObject:[points objectAtIndex:i]];
             i++;
-        } else 
+        } else {
             // Turning right is bad, so remove the top point
             [results removeLastObject];
+        }
     }
     
-    return results;    
+    return results;
 }
 
 - (BOOL) isPoint

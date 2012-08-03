@@ -29,14 +29,16 @@ FBBezierElement CGPath_FBElementAtIndex ( CGPathRef path, NSUInteger index )
     NSMutableDictionary *dictionary = [@{ @"currentIndex" : @( 0 ), @"targetIndex" : @( index ) } mutableCopy];
     CGPathApply(path, (__bridge void *)(dictionary), CGPath_MWElementAtIndex_ApplierFunction);
     
-    NSNumber *typeNumber = dictionary[@"type"];
+    // Note: Apparently, subscripting does not work with mutable collections
+    // in iOS 5 (it does in iOS 6).
+    NSNumber *typeNumber = [dictionary objectForKey:@"type"];
     if (!typeNumber)
     {
         return element;
     }
     
     element.kind = (CGPathElementType)[typeNumber intValue];
-    CGPoint *points = (CGPoint *)[(NSData *)dictionary[@"points"] bytes];
+    CGPoint *points = (CGPoint *)[(NSData *)[dictionary objectForKey:@"points"] bytes];
 
     switch (element.kind) {
         case kCGPathElementMoveToPoint:
@@ -130,12 +132,12 @@ void CGPath_FBAppendElement ( CGMutablePathRef path, FBBezierElement element )
 void CGPath_MWElementAtIndex_ApplierFunction ( void *info, const CGPathElement *element )
 {
     NSMutableDictionary *dictionary = (__bridge NSMutableDictionary *)info;
-    NSUInteger currentIndex = [dictionary[@"currentIndex"] unsignedIntegerValue];
-    NSUInteger targetIndex = [dictionary[@"targetIndex"] unsignedIntegerValue];
+    NSUInteger currentIndex = [[dictionary objectForKey:@"currentIndex"] unsignedIntegerValue];
+    NSUInteger targetIndex = [[dictionary objectForKey:@"targetIndex"] unsignedIntegerValue];
 
     if (targetIndex != currentIndex)
     {
-        dictionary[@"currentIndex"] = @( currentIndex + 1 );
+        [dictionary setObject:@( currentIndex + 1 ) forKey:@"currentIndex"];
         return;
     }
     
@@ -175,10 +177,10 @@ void CGPath_MWElementAtIndex_ApplierFunction ( void *info, const CGPathElement *
                                         length:(pointCount * sizeof(CGPoint))];
     
     // Package type and points.
-    dictionary[@"type"]   = @( type );
-    dictionary[@"points"] = pointsData;
+    [dictionary setObject:@( type ) forKey:@"type"];
+    [dictionary setObject:pointsData forKey:@"points"];
 
-    dictionary[@"currentIndex"] = @( currentIndex + 1 );
+    [dictionary setObject:@( currentIndex + 1 ) forKey:@"currentIndex"];
 }
 
 
