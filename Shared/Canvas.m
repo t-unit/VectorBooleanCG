@@ -57,7 +57,8 @@ static CGRect BoxFrame(CGPoint point)
 
 - (void) drawRect:(CGRect)dirtyRect
 {
-    // TODO: get current context depending on platform
+    // TODO: get current context depending on platform!
+    
     //CGRect cgRect = NSRectToCGRect(dirtyRect);
     CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
     
@@ -83,7 +84,7 @@ static CGRect BoxFrame(CGPoint point)
         for (NSDictionary *object in _paths) {
             CGPathRef path = (__bridge CGPathRef)([object objectForKey:@"path"]);
             
-            NSUInteger elementCount = CGPath_FBElementCount(path);
+            NSUInteger elementCount = CGPath_MWElementCount(path);
             for (NSInteger i = 0; i < elementCount; i++) {
                 FBBezierElement element = CGPath_FBElementAtIndex(path, i);
                 [[NSColor orangeColor] set];

@@ -1,15 +1,15 @@
 //
-//  FBPointValue.m
+//  MWPointValue.m
 //  VectorBoolean
 //
 //  Created by Martin Winter on 02.08.12.
-//  Copyright (c) 2012 Fortunate Bear, LLC. All rights reserved.
+//  Copyright (c) Martin Winter. All rights reserved.
 //
 
-#import "FBPointValue.h"
+#import "MWPointValue.h"
 
 
-@implementation FBPointValue
+@implementation MWPointValue
 {
     NSDictionary *_dictionary;
 }

@@ -10,7 +10,7 @@
 #import "CGPath_Utilities.h"
 #import "Geometry.h"
 #import "FBBezierIntersection.h"
-#import "FBPointValue.h"
+#import "MWPointValue.h"
 
 //////////////////////////////////////////////////////////////////////////////////
 // Normalized lines
@@ -182,7 +182,7 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     //  only lines are a special case.
     
     CGPoint lastPoint = CGPointZero;
-    NSUInteger elementCount = CGPath_FBElementCount(path);
+    NSUInteger elementCount = CGPath_MWElementCount(path);
     NSMutableArray *bezierCurves = [NSMutableArray arrayWithCapacity:elementCount];
     
     for (NSUInteger i = 0; i < elementCount; i++) {
@@ -504,8 +504,8 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     for (NSUInteger i = 0; i < [convexHull count]; i++) {
         // Pull out the current line on the convex hull
         NSUInteger indexOfNext = i < ([convexHull count] - 1) ? i + 1 : 0;
-        CGPoint startPoint = [(FBPointValue *)[convexHull objectAtIndex:i] point];
-        CGPoint endPoint = [(FBPointValue *)[convexHull objectAtIndex:indexOfNext] point];
+        CGPoint startPoint = [(MWPointValue *)[convexHull objectAtIndex:i] point];
+        CGPoint endPoint = [(MWPointValue *)[convexHull objectAtIndex:indexOfNext] point];
         CGPoint intersectionPoint = CGPointZero;
         
         // See if the segment of the convex hull intersects with the minimum fat line bounds
@@ -647,17 +647,17 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     
     // Start with all the end and control points in any order.
     NSMutableArray *points = [NSMutableArray arrayWithObjects:
-                              [[FBPointValue alloc] initWithPoint:_endPoint1],
-                              [[FBPointValue alloc] initWithPoint:_controlPoint1],
-                              [[FBPointValue alloc] initWithPoint:_controlPoint2],
-                              [[FBPointValue alloc] initWithPoint:_endPoint2],
+                              [[MWPointValue alloc] initWithPoint:_endPoint1],
+                              [[MWPointValue alloc] initWithPoint:_controlPoint1],
+                              [[MWPointValue alloc] initWithPoint:_controlPoint2],
+                              [[MWPointValue alloc] initWithPoint:_endPoint2],
                               nil];
 
     // First, find the point that is on the bottom right, and move it to the first position in our array.
     NSUInteger lowestIndex = 0;
-    CGPoint lowestValue = [(FBPointValue *)[points objectAtIndex:0] point];
+    CGPoint lowestValue = [(MWPointValue *)[points objectAtIndex:0] point];
     for (NSUInteger i = 0; i < [points count]; i++) {
-        CGPoint point = [(FBPointValue *)[points objectAtIndex:i] point];
+        CGPoint point = [(MWPointValue *)[points objectAtIndex:i] point];
         if ( point.y < lowestValue.y || (point.y == lowestValue.y && point.x > lowestValue.x) ) {
             lowestIndex = i;
             lowestValue = point;
@@ -669,8 +669,8 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     //  Remember any redundant (i.e. colinear) points so we can remove them later.
     NSMutableArray *pointsToDelete = [NSMutableArray arrayWithCapacity:4];
     [points sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        CGPoint point1 = [(FBPointValue *)obj1 point];
-        CGPoint point2 = [(FBPointValue *)obj2 point];
+        CGPoint point1 = [(MWPointValue *)obj1 point];
+        CGPoint point2 = [(MWPointValue *)obj2 point];
         
         // Special case: Our pivot value (lowestValue, at index 0) should stay at the lowest
         if ( CGPointEqualToPoint(lowestValue, point1) )
@@ -720,9 +720,9 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     [results addObject:[points objectAtIndex:1]];
     NSUInteger i = 2;
     while ( i < [points count] ) {
-        CGPoint lastPoint = [(FBPointValue *)[results lastObject] point];
-        CGPoint nextToLastPoint = [(FBPointValue *)[results objectAtIndex:[results count] - 2] point];
-        CGPoint pointUnderConsideration = [(FBPointValue *)[points objectAtIndex:i] point];
+        CGPoint lastPoint = [(MWPointValue *)[results lastObject] point];
+        CGPoint nextToLastPoint = [(MWPointValue *)[results objectAtIndex:[results count] - 2] point];
+        CGPoint pointUnderConsideration = [(MWPointValue *)[points objectAtIndex:i] point];
         CGFloat area = CounterClockwiseTurn(nextToLastPoint, lastPoint, pointUnderConsideration);
         if ( area > 0.0 ) {
             // Turning left is good, so keep going

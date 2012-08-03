@@ -8,13 +8,7 @@
 
 @class Canvas;
 
-#if TARGET_OS_IPHONE
-#define MWKC_MAIN_VIEW_CLASS UIView
-#else
-#define MWKC_MAIN_VIEW_CLASS NSView
-#endif
-
-@interface CanvasView : MWKC_MAIN_VIEW_CLASS {
+@interface CanvasView : NSView {
     Canvas *_canvas;    
 }
 

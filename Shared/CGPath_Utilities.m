@@ -3,15 +3,16 @@
 //  VectorBoolean
 //
 //  Created by Martin Winter on 02.08.12.
-//  Copyright (c) 2012 Fortunate Bear, LLC. All rights reserved.
+//  Based on work by Andrew Finnell of Fortunate Bear, LLC.
+//  Copyright (c) 2012 Martin Winter. All rights reserved.
 //
 
 #include "CGPath_Utilities.h"
 
 
-void CGPath_FBElementAtIndex_ApplierFunction ( void *info, const CGPathElement *element );
-void CGPath_FBElementCount_ApplierFunction ( void *info, const CGPathElement *element );
-void CGPath_FBLog_ApplierFunction ( void *info, const CGPathElement *element );
+void CGPath_MWElementAtIndex_ApplierFunction ( void *info, const CGPathElement *element );
+void CGPath_MWElementCount_ApplierFunction ( void *info, const CGPathElement *element );
+void CGPath_MWLog_ApplierFunction ( void *info, const CGPathElement *element );
 
 
 CGPoint CGPath_FBPointAtIndex ( CGPathRef path, NSUInteger index )
@@ -26,7 +27,7 @@ FBBezierElement CGPath_FBElementAtIndex ( CGPathRef path, NSUInteger index )
     
     // Use CGPathApply in lieu of -[NSBezierPath elementAtIndex:associatedPoints:].
     NSMutableDictionary *dictionary = [@{ @"currentIndex" : @( 0 ), @"targetIndex" : @( index ) } mutableCopy];
-    CGPathApply(path, (__bridge void *)(dictionary), CGPath_FBElementAtIndex_ApplierFunction);
+    CGPathApply(path, (__bridge void *)(dictionary), CGPath_MWElementAtIndex_ApplierFunction);
     
     NSNumber *typeNumber = dictionary[@"type"];
     if (!typeNumber)
@@ -52,7 +53,7 @@ FBBezierElement CGPath_FBElementAtIndex ( CGPathRef path, NSUInteger index )
         
         case kCGPathElementAddQuadCurveToPoint:
         default:
-            NSLog(@"%s  Encountered unhandled element type kCGPathElementAddQuadCurveToPoint", __PRETTY_FUNCTION__);
+            NSLog(@"%s  Encountered unhandled element type (quad curve)", __PRETTY_FUNCTION__);
             break;
     }
     return element;
@@ -75,12 +76,12 @@ CGPathRef CGPath_FBCreateSubpathWithRange ( CGPathRef path, NSRange range )
 
 void CGPath_FBAppendPath ( CGMutablePathRef path, CGPathRef otherPath )
 {
-    NSUInteger elementCount = CGPath_FBElementCount(path);
+    NSUInteger elementCount = CGPath_MWElementCount(path);
     FBBezierElement previousElement = (elementCount > 0
                                        ? CGPath_FBElementAtIndex(path, elementCount - 1)
                                        : (FBBezierElement){});
     
-    NSUInteger otherElementCount = CGPath_FBElementCount(otherPath);
+    NSUInteger otherElementCount = CGPath_MWElementCount(otherPath);
     for (NSUInteger i = 0; i < otherElementCount; i++) {
         FBBezierElement element = CGPath_FBElementAtIndex(otherPath, i);
         
@@ -126,7 +127,7 @@ void CGPath_FBAppendElement ( CGMutablePathRef path, FBBezierElement element )
 #pragma mark -
 
 
-void CGPath_FBElementAtIndex_ApplierFunction ( void *info, const CGPathElement *element )
+void CGPath_MWElementAtIndex_ApplierFunction ( void *info, const CGPathElement *element )
 {
     NSMutableDictionary *dictionary = (__bridge NSMutableDictionary *)info;
     NSUInteger currentIndex = [dictionary[@"currentIndex"] unsignedIntegerValue];
@@ -162,7 +163,7 @@ void CGPath_FBElementAtIndex_ApplierFunction ( void *info, const CGPathElement *
             break;
             
         case kCGPathElementCloseSubpath:
-            pointCount = 1; // This must be one (as opposed to when logging)!
+            pointCount = 1; // This _must_ be one (as opposed to when logging)!
             break;
             
         default:
@@ -181,22 +182,22 @@ void CGPath_FBElementAtIndex_ApplierFunction ( void *info, const CGPathElement *
 }
 
 
-NSUInteger CGPath_FBElementCount ( CGPathRef path )
+NSUInteger CGPath_MWElementCount ( CGPathRef path )
 {
     NSUInteger count = 0;
-    CGPathApply(path, &count, CGPath_FBElementCount_ApplierFunction);
+    CGPathApply(path, &count, CGPath_MWElementCount_ApplierFunction);
     return count;
 }
 
 
-void CGPath_FBElementCount_ApplierFunction ( void *info, const CGPathElement *element )
+void CGPath_MWElementCount_ApplierFunction ( void *info, const CGPathElement *element )
 {
     NSUInteger *count = (NSUInteger *)info;
     (*count)++;
 }
 
 
-NSString * CGPath_FBLog ( CGPathRef path )
+NSString * CGPath_MWLog ( CGPathRef path )
 {
     NSMutableString *string = [NSMutableString stringWithFormat:@"CGPath <%#lx>", (NSUInteger)path];
     
@@ -208,12 +209,12 @@ NSString * CGPath_FBLog ( CGPathRef path )
     [string appendFormat:@"\n  Control point bounds: {{%f, %f}, {%f, %f}}",
      controlBounds.origin.x, controlBounds.origin.y, controlBounds.size.width, controlBounds.size.height];
     
-    CGPathApply(path, (__bridge void *)(string), CGPath_FBLog_ApplierFunction);
+    CGPathApply(path, (__bridge void *)(string), CGPath_MWLog_ApplierFunction);
     return string;
 }
 
 
-void CGPath_FBLog_ApplierFunction ( void *info, const CGPathElement *element )
+void CGPath_MWLog_ApplierFunction ( void *info, const CGPathElement *element )
 {
     NSMutableString *string = (__bridge NSMutableString *)info;
     CGPathElementType type = element->type;

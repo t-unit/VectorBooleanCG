@@ -14,7 +14,7 @@
 
 @synthesize canvas=_canvas;
 
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -24,7 +24,7 @@
     return self;
 }
 
-- (void)drawRect:(CGRect)dirtyRect
+- (void)drawRect:(NSRect)dirtyRect
 {
     [_canvas drawRect:dirtyRect];
 }

@@ -151,7 +151,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
         _contours = [[NSMutableArray alloc] initWithCapacity:2];
             
         FBBezierContour *contour = nil;
-        NSUInteger elementCount = CGPath_FBElementCount(path);
+        NSUInteger elementCount = CGPath_MWElementCount(path);
         for (NSUInteger i = 0; i < elementCount; i++) {
             FBBezierElement element = CGPath_FBElementAtIndex(path, i);
             

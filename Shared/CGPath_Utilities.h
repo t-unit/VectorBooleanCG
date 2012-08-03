@@ -3,7 +3,8 @@
 //  VectorBoolean
 //
 //  Created by Martin Winter on 02.08.12.
-//  Copyright (c) 2012 Fortunate Bear, LLC. All rights reserved.
+//  Based on work by Andrew Finnell of Fortunate Bear, LLC.
+//  Copyright (c) 2012 Martin Winter. All rights reserved.
 //
 
 #ifndef VectorBoolean_CGPath_Utilities_h
@@ -51,11 +52,11 @@ void CGPath_FBAppendElement (
 );
 
 
-NSUInteger CGPath_FBElementCount (
+NSUInteger CGPath_MWElementCount (
     CGPathRef path
 );
 
-NSString * CGPath_FBLog (
+NSString * CGPath_MWLog (
     CGPathRef path
 );
 

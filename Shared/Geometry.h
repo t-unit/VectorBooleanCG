@@ -7,6 +7,9 @@
 //
 
 
+// Note: NSPoint has been replaced by CGPoint.
+
+
 CGFloat FBDistanceBetweenPoints(CGPoint point1, CGPoint point2);
 CGFloat FBDistancePointToLine(CGPoint point, CGPoint lineStartPoint, CGPoint lineEndPoint);
 CGPoint FBLineNormal(CGPoint lineStart, CGPoint lineEnd);

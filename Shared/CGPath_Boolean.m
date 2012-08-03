@@ -3,7 +3,8 @@
 //  VectorBoolean
 //
 //  Created by Martin Winter on 02.08.12.
-//  Copyright (c) 2012 Fortunate Bear, LLC. All rights reserved.
+//  Based on work by Andrew Finnell of Fortunate Bear, LLC.
+//  Copyright (c) 2012 Martin Winter. All rights reserved.
 //
 
 #include "CGPath_Boolean.h"
