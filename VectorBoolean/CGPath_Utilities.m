@@ -11,6 +11,7 @@
 
 void CGPath_FBElementAtIndex_ApplierFunction ( void *info, const CGPathElement *element );
 void CGPath_FBElementCount_ApplierFunction ( void *info, const CGPathElement *element );
+void CGPath_FBLog_ApplierFunction ( void *info, const CGPathElement *element );
 
 
 CGPoint CGPath_FBPointAtIndex ( CGPathRef path, NSUInteger index )
@@ -24,7 +25,7 @@ FBBezierElement CGPath_FBElementAtIndex ( CGPathRef path, NSUInteger index )
     FBBezierElement element = {};
     
     // Use CGPathApply in lieu of -[NSBezierPath elementAtIndex:associatedPoints:].
-    NSMutableDictionary *dictionary = [@{ @"targetIndex" : @( index ) } mutableCopy];
+    NSMutableDictionary *dictionary = [@{ @"currentIndex" : @( 0 ), @"targetIndex" : @( index ) } mutableCopy];
     CGPathApply(path, (__bridge void *)(dictionary), CGPath_FBElementAtIndex_ApplierFunction);
     
     NSNumber *typeNumber = dictionary[@"type"];
@@ -128,12 +129,12 @@ void CGPath_FBAppendElement ( CGMutablePathRef path, FBBezierElement element )
 void CGPath_FBElementAtIndex_ApplierFunction ( void *info, const CGPathElement *element )
 {
     NSMutableDictionary *dictionary = (__bridge NSMutableDictionary *)info;
+    NSUInteger currentIndex = [dictionary[@"currentIndex"] unsignedIntegerValue];
     NSUInteger targetIndex = [dictionary[@"targetIndex"] unsignedIntegerValue];
-    NSUInteger currentIndex = [dictionary[@"currentIndex"] unsignedIntegerValue] + 1;
-    dictionary[@"currentIndex"] = @( currentIndex );
 
     if (targetIndex != currentIndex)
     {
+        dictionary[@"currentIndex"] = @( currentIndex + 1 );
         return;
     }
     
@@ -161,7 +162,7 @@ void CGPath_FBElementAtIndex_ApplierFunction ( void *info, const CGPathElement *
             break;
             
         case kCGPathElementCloseSubpath:
-            pointCount = 0;
+            pointCount = 1; // This must be one (as opposed to when logging)!
             break;
             
         default:
@@ -175,6 +176,8 @@ void CGPath_FBElementAtIndex_ApplierFunction ( void *info, const CGPathElement *
     // Package type and points.
     dictionary[@"type"]   = @( type );
     dictionary[@"points"] = pointsData;
+
+    dictionary[@"currentIndex"] = @( currentIndex + 1 );
 }
 
 
@@ -190,4 +193,71 @@ void CGPath_FBElementCount_ApplierFunction ( void *info, const CGPathElement *el
 {
     NSUInteger *count = (NSUInteger *)info;
     (*count)++;
+}
+
+
+NSString * CGPath_FBLog ( CGPathRef path )
+{
+    NSMutableString *string = [NSMutableString stringWithFormat:@"CGPath <%#lx>", (NSUInteger)path];
+    
+    CGRect bounds = CGPathGetPathBoundingBox(path);
+    [string appendFormat:@"\n  Bounds: {{%f, %f}, {%f, %f}}",
+     bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height];
+    
+    CGRect controlBounds = CGPathGetBoundingBox(path);
+    [string appendFormat:@"\n  Control point bounds: {{%f, %f}, {%f, %f}}",
+     controlBounds.origin.x, controlBounds.origin.y, controlBounds.size.width, controlBounds.size.height];
+    
+    CGPathApply(path, (__bridge void *)(string), CGPath_FBLog_ApplierFunction);
+    return string;
+}
+
+
+void CGPath_FBLog_ApplierFunction ( void *info, const CGPathElement *element )
+{
+    NSMutableString *string = (__bridge NSMutableString *)info;
+    CGPathElementType type = element->type;
+    CGPoint *points = element->points;
+    
+    NSUInteger pointCount = 0;
+    NSString *command = @"";
+    switch (type)
+    {
+        case kCGPathElementMoveToPoint:
+            pointCount = 1;
+            command = @"moveto";
+            break;
+            
+        case kCGPathElementAddLineToPoint:
+            pointCount = 1;
+            command = @"lineto";
+            break;
+            
+        case kCGPathElementAddQuadCurveToPoint:
+            pointCount = 2;
+            command = @"quadcurveto";
+            break;
+            
+        case kCGPathElementAddCurveToPoint:
+            pointCount = 3;
+            command = @"curveto";
+            break;
+            
+        case kCGPathElementCloseSubpath:
+            pointCount = 0;
+            command = @"closepath";
+            break;
+            
+        default:
+            return;
+    }
+    
+    [string appendString:@"\n    "];
+    
+    for (NSUInteger pointIndex = 0; pointIndex < pointCount; pointIndex++)
+    {
+        [string appendFormat:@"%f %f ", points[pointIndex].x, points[pointIndex].y];
+    }
+    
+    [string appendString:command];
 }

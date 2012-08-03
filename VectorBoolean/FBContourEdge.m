@@ -26,6 +26,7 @@
     self = [super init];
     
     if ( self != nil ) {
+        _curve = curve;
         _crossings = [[NSMutableArray alloc] initWithCapacity:4];
         _contour = contour; // no cyclical references
     }

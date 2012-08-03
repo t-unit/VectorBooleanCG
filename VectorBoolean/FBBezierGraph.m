@@ -160,7 +160,6 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
                     // Start a new contour
                     contour = [[FBBezierContour alloc] init];
                     [self addContour:contour];
-                    
                     lastPoint = element.point;
                     break;
                     
@@ -171,7 +170,6 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
                         //  by the end points
                         FBBezierCurve *curve = [FBBezierCurve bezierCurveWithLineStartPoint:lastPoint endPoint:element.point];
                         [contour addCurve:curve];
-                        
                         lastPoint = element.point;
                     }
                     break;
@@ -184,7 +182,6 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
                                                                      controlPoint2:element.controlPoints[1]
                                                                          endPoint2:element.point];
                     [contour addCurve:curve];
-                    
                     lastPoint = element.point;
                     break;
                 }
@@ -211,6 +208,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
                 
                 case kCGPathElementAddQuadCurveToPoint:
                 default:
+                    NSLog(@"%s  Encountered unhandled element type (quad curve)", __PRETTY_FUNCTION__);
                     break;
             }
         }

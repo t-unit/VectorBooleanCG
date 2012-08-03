@@ -55,5 +55,9 @@ NSUInteger CGPath_FBElementCount (
     CGPathRef path
 );
 
+NSString * CGPath_FBLog (
+    CGPathRef path
+);
+
 
 #endif

@@ -411,10 +411,6 @@ static CGColorRef _blueColor;
     [self onReset:sender];
     
     CGPathRef result = CGPath_FBCreateUnion([_view.canvas pathAtIndex:0], [_view.canvas pathAtIndex:1]);
-
-    NSUInteger elementCount = CGPath_FBElementCount(result);
-    NSLog(@"%s  elementCount: %lx", __PRETTY_FUNCTION__, elementCount);
-
     [_view.canvas clear];
     [_view.canvas addPath:result withColor:_blueColor];
     CGPathRelease(result);
