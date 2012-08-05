@@ -8,7 +8,7 @@
 
 #import "FBBezierCurve.h"
 #import "CGPath_Utilities.h"
-#import "Geometry.h"
+#import "FBGeometry.h"
 #import "FBBezierIntersection.h"
 #import "MWPointValue.h"
 
@@ -16,26 +16,26 @@
 // Normalized lines
 //
 typedef struct FBNormalizedLine {
-    CGFloat a; // * x +
-    CGFloat b; // * y +
-    CGFloat c; // constant
+    MWFloat a; // * x +
+    MWFloat b; // * y +
+    MWFloat c; // constant
 } FBNormalizedLine;
 
 // Create a normalized line such that computing the distance from it is quick.
 //  See:    http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm#Distance%20to%20an%20Infinite%20Line
 //          http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/geometry/basic.html
 //
-static FBNormalizedLine FBNormalizedLineMake(CGPoint point1, CGPoint point2)
+static FBNormalizedLine FBNormalizedLineMake(MWPoint point1, MWPoint point2)
 {
     FBNormalizedLine line = { point1.y - point2.y, point2.x - point1.x, point1.x * point2.y - point2.x * point1.y };
-    CGFloat distance = sqrtf(line.b * line.b + line.a * line.a);
+    MWFloat distance = sqrt(line.b * line.b + line.a * line.a);
     line.a /= distance;
     line.b /= distance;
     line.c /= distance;
     return line;
 }
 
-static CGFloat FBNormalizedLineDistanceFromPoint(FBNormalizedLine line, CGPoint point)
+static MWFloat FBNormalizedLineDistanceFromPoint(FBNormalizedLine line, MWPoint point)
 {
     return line.a * point.x + line.b * point.y + line.c;
 }
@@ -43,7 +43,7 @@ static CGFloat FBNormalizedLineDistanceFromPoint(FBNormalizedLine line, CGPoint 
 //////////////////////////////////////////////////////////////////////////////////
 // Parameter ranges
 //
-FBRange FBRangeMake(CGFloat minimum, CGFloat maximum)
+FBRange FBRangeMake(MWFloat minimum, MWFloat maximum)
 {
     FBRange range = { minimum, maximum };
     return range;
@@ -51,23 +51,23 @@ FBRange FBRangeMake(CGFloat minimum, CGFloat maximum)
 
 BOOL FBRangeHasConverged(FBRange range, NSUInteger places)
 {
-    CGFloat factor = powf(10.0, places);
+    MWFloat factor = pow(10.0, places);
     NSInteger minimum = (NSInteger)(range.minimum * factor);
     NSInteger maxiumum = (NSInteger)(range.maximum * factor);
     return minimum == maxiumum;
 }
 
-CGFloat FBRangeGetSize(FBRange range)
+MWFloat FBRangeGetSize(FBRange range)
 {
     return range.maximum - range.minimum;
 }
 
-CGFloat FBRangeAverage(FBRange range)
+MWFloat FBRangeAverage(FBRange range)
 {
     return (range.minimum + range.maximum) / 2.0;
 }
 
-CGFloat FBRangeScaleNormalizedValue(FBRange range, CGFloat value)
+MWFloat FBRangeScaleNormalizedValue(FBRange range, MWFloat value)
 {
     return (range.maximum - range.minimum) * value + range.minimum;
 }
@@ -78,7 +78,7 @@ CGFloat FBRangeScaleNormalizedValue(FBRange range, CGFloat value)
 
 // The three points are a counter-clockwise turn if the return value is greater than 0,
 //  clockwise if less than 0, or colinear if 0.
-static CGFloat CounterClockwiseTurn(CGPoint point1, CGPoint point2, CGPoint point3)
+static MWFloat CounterClockwiseTurn(MWPoint point1, MWPoint point2, MWPoint point3)
 {
     // We're calculating the signed area of the triangle formed by the three points. Well,
     //  almost the area of the triangle -- we'd need to divide by 2. But since we only
@@ -88,7 +88,7 @@ static CGFloat CounterClockwiseTurn(CGPoint point1, CGPoint point2, CGPoint poin
 }
 
 // Calculate if and where the given line intersects the horizontal line at y.
-static BOOL LineIntersectsHorizontalLine(CGPoint startPoint, CGPoint endPoint, CGFloat y, CGPoint *intersectPoint)
+static BOOL LineIntersectsHorizontalLine(MWPoint startPoint, MWPoint endPoint, MWFloat y, MWPoint *intersectPoint)
 {
     // Do a quick test to see if y even falls on the startPoint,endPoint line
     if ( y < MIN(startPoint.y, endPoint.y) || y > MAX(startPoint.y, endPoint.y) )
@@ -96,16 +96,16 @@ static BOOL LineIntersectsHorizontalLine(CGPoint startPoint, CGPoint endPoint, C
     
     // There's an intersection here somewhere
     if ( startPoint.x == endPoint.x )
-        *intersectPoint = CGPointMake(startPoint.x, y);
+        *intersectPoint = MWPointMake(startPoint.x, y);
     else {
-        CGFloat slope = (endPoint.y - startPoint.y) / (endPoint.x - startPoint.x);
-        *intersectPoint = CGPointMake((y - startPoint.y) / slope + startPoint.x, y);
+        MWFloat slope = (endPoint.y - startPoint.y) / (endPoint.x - startPoint.x);
+        *intersectPoint = MWPointMake((y - startPoint.y) / slope + startPoint.x, y);
     }
     
     return YES;
 }
 
-static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloat parameter, CGPoint *leftCurve, CGPoint *rightCurve)
+static MWPoint BezierWithPoints(NSUInteger degree, MWPoint *bezierPoints, MWFloat parameter, MWPoint *leftCurve, MWPoint *rightCurve)
 {
     // Calculate a point on the bezier curve passed in, specifically the point at parameter.
     //  We're using De Casteljau's algorithm, which not only calculates the point at parameter
@@ -119,7 +119,7 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     // degree is the order of the bezier path, which will be cubic (3) most of the time.
     
     // With this algorithm we start out with the points in the bezier path. 
-    CGPoint points[4] = {}; // we assume we'll never get more than a cubic bezier
+    MWPoint points[4] = {}; // we assume we'll never get more than a cubic bezier
     for (NSUInteger i = 0; i <= degree; i++)
         points[i] = bezierPoints[i];
     
@@ -159,11 +159,11 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
 - (FBNormalizedLine) perpendicularFatLineBounds:(FBRange *)range;
 
 - (FBRange) clipWithFatLine:(FBNormalizedLine)fatLine bounds:(FBRange)bounds;
-- (NSArray *) splitCurveAtParameter:(CGFloat)t;
+- (NSArray *) splitCurveAtParameter:(MWFloat)t;
 - (NSArray *) convexHull;
 - (FBBezierCurve *) bezierClipWithBezierCurve:(FBBezierCurve *)curve original:(FBBezierCurve *)originalCurve rangeOfOriginal:(FBRange *)originalRange intersects:(BOOL *)intersects;
 - (NSArray *) intersectionsWithBezierCurve:(FBBezierCurve *)curve usRange:(FBRange *)usRange themRange:(FBRange *)themRange originalUs:(FBBezierCurve *)originalUs originalThem:(FBBezierCurve *)originalThem;
-- (CGFloat) refineParameter:(CGFloat)parameter forPoint:(CGPoint)point;
+- (MWFloat) refineParameter:(MWFloat)parameter forPoint:(MWPoint)point;
 
 @property (readonly, getter = isPoint) BOOL point;
 
@@ -181,7 +181,7 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     // Helper method to easily convert a bezier path into an array of FBBezierCurves. Very straight forward,
     //  only lines are a special case.
     
-    CGPoint lastPoint = CGPointZero;
+    MWPoint lastPoint = MWPointZeroMake();
     NSUInteger elementCount = CGPath_MWElementCount(path);
     NSMutableArray *bezierCurves = [NSMutableArray arrayWithCapacity:elementCount];
     
@@ -190,26 +190,29 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
         
         switch (element.kind) {
             case kCGPathElementMoveToPoint:
-                lastPoint = element.point;
+                lastPoint = MWPointFromCGPoint(element.point);
                 break;
                 
             case kCGPathElementAddLineToPoint: {
                 // Convert lines to bezier curves as well. Just set control point to be in the line formed
                 //  by the end points
-                [bezierCurves addObject:[FBBezierCurve bezierCurveWithLineStartPoint:lastPoint endPoint:element.point]];
+                [bezierCurves addObject:[FBBezierCurve bezierCurveWithLineStartPoint:lastPoint endPoint:MWPointFromCGPoint(element.point)]];
                 
-                lastPoint = element.point;
+                lastPoint = MWPointFromCGPoint(element.point);
                 break;
             }
                 
             case kCGPathElementAddCurveToPoint:
-                [bezierCurves addObject:[FBBezierCurve bezierCurveWithEndPoint1:lastPoint controlPoint1:element.controlPoints[0] controlPoint2:element.controlPoints[1] endPoint2:element.point]];
+                [bezierCurves addObject:[FBBezierCurve bezierCurveWithEndPoint1:lastPoint
+                                                                  controlPoint1:MWPointFromCGPoint(element.controlPoints[0])
+                                                                  controlPoint2:MWPointFromCGPoint(element.controlPoints[1])
+                                                                      endPoint2:MWPointFromCGPoint(element.point)]];
                 
-                lastPoint = element.point;
+                lastPoint = MWPointFromCGPoint(element.point);
                 break;
                 
             case kCGPathElementCloseSubpath:
-                lastPoint = CGPointZero;
+                lastPoint = MWPointZeroMake();
                 break;
             
             case kCGPathElementAddQuadCurveToPoint:
@@ -221,17 +224,17 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     return bezierCurves;
 }
 
-+ (id) bezierCurveWithLineStartPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint
++ (id) bezierCurveWithLineStartPoint:(MWPoint)startPoint endPoint:(MWPoint)endPoint
 {
     return [[FBBezierCurve alloc] initWithLineStartPoint:startPoint endPoint:endPoint];
 }
 
-+ (id) bezierCurveWithEndPoint1:(CGPoint)endPoint1 controlPoint1:(CGPoint)controlPoint1 controlPoint2:(CGPoint)controlPoint2 endPoint2:(CGPoint)endPoint2
++ (id) bezierCurveWithEndPoint1:(MWPoint)endPoint1 controlPoint1:(MWPoint)controlPoint1 controlPoint2:(MWPoint)controlPoint2 endPoint2:(MWPoint)endPoint2
 {
     return [[FBBezierCurve alloc] initWithEndPoint1:endPoint1 controlPoint1:controlPoint1 controlPoint2:controlPoint2 endPoint2:endPoint2];
 }
 
-- (id) initWithEndPoint1:(CGPoint)endPoint1 controlPoint1:(CGPoint)controlPoint1 controlPoint2:(CGPoint)controlPoint2 endPoint2:(CGPoint)endPoint2
+- (id) initWithEndPoint1:(MWPoint)endPoint1 controlPoint1:(MWPoint)controlPoint1 controlPoint2:(MWPoint)controlPoint2 endPoint2:(MWPoint)endPoint2
 {
     self = [super init];
     
@@ -245,7 +248,7 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     return self;
 }
 
-- (id) initWithLineStartPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint
+- (id) initWithLineStartPoint:(MWPoint)startPoint endPoint:(MWPoint)endPoint
 {
     self = [super init];
     
@@ -254,8 +257,8 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
         //  has to deal with curves, not lines). As long as the control points are colinear with the
         //  end points, it'll be a line. But for consistency sake, we put the control points inside
         //  the end points, 1/3 of the total distance away from their respective end point.
-        CGFloat distance = FBDistanceBetweenPoints(startPoint, endPoint);
-        CGPoint leftTangent = FBNormalizePoint(FBSubtractPoint(endPoint, startPoint));
+        MWFloat distance = FBDistanceBetweenPoints(startPoint, endPoint);
+        MWPoint leftTangent = FBNormalizePoint(FBSubtractPoint(endPoint, startPoint));
         _controlPoint1 = FBAddPoint(startPoint, FBUnitScalePoint(leftTangent, distance / 3.0));
         _controlPoint2 = FBAddPoint(startPoint, FBUnitScalePoint(leftTangent, 2.0 * distance / 3.0));
         _endPoint1 = startPoint;
@@ -282,7 +285,7 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     
     static const NSUInteger places = 6; // How many decimals place to calculate the solution out to
     static const NSUInteger maxIterations = 500; // how many iterations to allow before we just give up
-    static const CGFloat minimumChangeNeeded = 0.20; // how much to clip off for a given iteration minimum before we subdivide the curve
+    static const MWFloat minimumChangeNeeded = 0.20; // how much to clip off for a given iteration minimum before we subdivide the curve
 
     FBBezierCurve *us = self; // us is self, but clipped down to where the intersection is
     FBBezierCurve *them = curve; // them is the other curve we're intersecting with, but clipped down to where the intersection is
@@ -302,21 +305,31 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
         //  copy of them so calculations still work.
         BOOL intersects = NO;
         us = [us bezierClipWithBezierCurve:them.isPoint ? previousThem : them original:originalUs rangeOfOriginal:usRange intersects:&intersects];
+
         if ( !intersects )
+        {
             return [NSArray array]; // If they don't intersect at all stop now
+        }
+
         // Remove the range of them that doesn't intersect with us
         them = [them bezierClipWithBezierCurve:us.isPoint ? previousUs : us original:originalThem rangeOfOriginal:themRange intersects:&intersects];
+        
         if ( !intersects )
+        {
             return [NSArray array];  // If they don't intersect at all stop now
+        }
         
         // If either curve has been reduced to a point, stop now even if the range hasn't properly converged. Once curves become points, the math
         //  falls apart.
         if ( us.isPoint || them.isPoint )
+        {
             break;
+        }
         
         // See if either of curves ranges is reduced by less than 20%.
-        CGFloat percentChangeInUs = (FBRangeGetSize(previousUsRange) - FBRangeGetSize(*usRange)) / FBRangeGetSize(previousUsRange);
-        CGFloat percentChangeInThem = (FBRangeGetSize(previousThemRange) - FBRangeGetSize(*themRange)) / FBRangeGetSize(previousThemRange);
+        MWFloat percentChangeInUs = (FBRangeGetSize(previousUsRange) - FBRangeGetSize(*usRange)) / FBRangeGetSize(previousUsRange);
+        MWFloat percentChangeInThem = (FBRangeGetSize(previousThemRange) - FBRangeGetSize(*themRange)) / FBRangeGetSize(previousThemRange);
+
         if ( percentChangeInUs < minimumChangeNeeded && percentChangeInThem < minimumChangeNeeded ) {
             // We're not converging fast enough, likely because there are multiple intersections here. So
             //  divide and conquer. Divide the longer curve in half, and recurse
@@ -333,7 +346,7 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
                 // Compute the intersections between the two halves of us and them
                 NSArray *intersections1 = [us1 intersectionsWithBezierCurve:them usRange:&usRange1 themRange:&themRangeCopy1 originalUs:originalUs originalThem:originalThem];
                 NSArray *intersections2 = [us2 intersectionsWithBezierCurve:them usRange:&usRange2 themRange:&themRangeCopy2 originalUs:originalUs originalThem:originalThem];
-                
+
                 return [intersections1 arrayByAddingObjectsFromArray:intersections2];
             } else {
                 // Since their remaining range is longer, split the remains of them in half at the midway point
@@ -348,7 +361,7 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
                 // Compute the intersections between the two halves of them and us
                 NSArray *intersections1 = [us intersectionsWithBezierCurve:them1 usRange:&usRangeCopy1 themRange:&themRange1 originalUs:originalUs originalThem:originalThem];
                 NSArray *intersections2 = [us intersectionsWithBezierCurve:them2 usRange:&usRangeCopy2 themRange:&themRange2 originalUs:originalUs originalThem:originalThem];
-                
+
                 return [intersections1 arrayByAddingObjectsFromArray:intersections2];
             }
         }
@@ -365,18 +378,22 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     //  the parameter of the curve that did't converge.
     if ( FBRangeHasConverged(*usRange, places) && !FBRangeHasConverged(*themRange, places) ) {
         // Refine the them range since it didn't converge
-        CGPoint intersectionPoint = [originalUs pointAtParameter:usRange->minimum leftBezierCurve:nil rightBezierCurve:nil];
-        CGFloat refinedParameter = FBRangeAverage(*themRange); // Although the range didn't converge, it should be a reasonable approximation which is all Newton needs
+        MWPoint intersectionPoint = [originalUs pointAtParameter:usRange->minimum leftBezierCurve:nil rightBezierCurve:nil];
+        MWFloat refinedParameter = FBRangeAverage(*themRange); // Although the range didn't converge, it should be a reasonable approximation which is all Newton needs
+
         for (NSUInteger i = 0; i < 3; i++)
             refinedParameter = [originalThem refineParameter:refinedParameter forPoint:intersectionPoint];
+
         themRange->minimum = refinedParameter;
         themRange->maximum = refinedParameter;
     } else if ( !FBRangeHasConverged(*usRange, places) && FBRangeHasConverged(*themRange, places) ) {
         // Refine the us range since it didn't converge
-        CGPoint intersectionPoint = [originalThem pointAtParameter:themRange->minimum leftBezierCurve:nil rightBezierCurve:nil];
-        CGFloat refinedParameter = FBRangeAverage(*usRange); // Although the range didn't converge, it should be a reasonable approximation which is all Newton needs
+        MWPoint intersectionPoint = [originalThem pointAtParameter:themRange->minimum leftBezierCurve:nil rightBezierCurve:nil];
+        MWFloat refinedParameter = FBRangeAverage(*usRange); // Although the range didn't converge, it should be a reasonable approximation which is all Newton needs
+
         for (NSUInteger i = 0; i < 3; i++)
             refinedParameter = [originalUs refineParameter:refinedParameter forPoint:intersectionPoint];
+
         usRange->minimum = refinedParameter;
         usRange->maximum = refinedParameter;        
     }
@@ -447,10 +464,10 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     
     // In this case, we know that the end points are on the line, thus their distances will be 0.
     //  So we can skip computing those and just use 0.
-    CGFloat controlPoint1Distance = FBNormalizedLineDistanceFromPoint(line, _controlPoint1);
-    CGFloat controlPoint2Distance = FBNormalizedLineDistanceFromPoint(line, _controlPoint2);    
-    CGFloat min = MIN(controlPoint1Distance, MIN(controlPoint2Distance, 0.0));
-    CGFloat max = MAX(controlPoint1Distance, MAX(controlPoint2Distance, 0.0));
+    MWFloat controlPoint1Distance = FBNormalizedLineDistanceFromPoint(line, _controlPoint1);
+    MWFloat controlPoint2Distance = FBNormalizedLineDistanceFromPoint(line, _controlPoint2);    
+    MWFloat min = MIN(controlPoint1Distance, MIN(controlPoint2Distance, 0.0));
+    MWFloat max = MAX(controlPoint1Distance, MAX(controlPoint2Distance, 0.0));
         
     *range = FBRangeMake(min, max);
     
@@ -460,22 +477,22 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
 - (FBNormalizedLine) perpendicularFatLineBounds:(FBRange *)range
 {
     // Create a fat line that's perpendicular to the line created by the two end points.
-    CGPoint normal = FBLineNormal(_endPoint1, _endPoint2);
-    CGPoint startPoint = FBLineMidpoint(_endPoint1, _endPoint2);
-    CGPoint endPoint = FBAddPoint(startPoint, normal);
+    MWPoint normal = FBLineNormal(_endPoint1, _endPoint2);
+    MWPoint startPoint = FBLineMidpoint(_endPoint1, _endPoint2);
+    MWPoint endPoint = FBAddPoint(startPoint, normal);
     FBNormalizedLine line = FBNormalizedLineMake(startPoint, endPoint);
     
     // Compute the bounds of the fat line. The fat line bounds should entirely encompass the
     //  bezier curve. Since we know the convex hull entirely compasses the curve, just take
     //  all four points that define this cubic bezier curve. Compute the signed distances of
     //  each of the end and control points from the fat line, and that will give us the bounds.
-    CGFloat controlPoint1Distance = FBNormalizedLineDistanceFromPoint(line, _controlPoint1);
-    CGFloat controlPoint2Distance = FBNormalizedLineDistanceFromPoint(line, _controlPoint2);
-    CGFloat point1Distance = FBNormalizedLineDistanceFromPoint(line, _endPoint1);
-    CGFloat point2Distance = FBNormalizedLineDistanceFromPoint(line, _endPoint2);
+    MWFloat controlPoint1Distance = FBNormalizedLineDistanceFromPoint(line, _controlPoint1);
+    MWFloat controlPoint2Distance = FBNormalizedLineDistanceFromPoint(line, _controlPoint2);
+    MWFloat point1Distance = FBNormalizedLineDistanceFromPoint(line, _endPoint1);
+    MWFloat point2Distance = FBNormalizedLineDistanceFromPoint(line, _endPoint2);
 
-    CGFloat min = MIN(controlPoint1Distance, MIN(controlPoint2Distance, MIN(point1Distance, point2Distance)));
-    CGFloat max = MAX(controlPoint1Distance, MAX(controlPoint2Distance, MAX(point1Distance, point2Distance)));
+    MWFloat min = MIN(controlPoint1Distance, MIN(controlPoint2Distance, MIN(point1Distance, point2Distance)));
+    MWFloat max = MAX(controlPoint1Distance, MAX(controlPoint2Distance, MAX(point1Distance, point2Distance)));
     
     *range = FBRangeMake(min, max);
     
@@ -496,7 +513,8 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     //  inside of it.
     
     // First calculate bezier curve points distance from the fat line that's clipping us
-    FBBezierCurve *distanceBezier = [FBBezierCurve bezierCurveWithEndPoint1:CGPointMake(0, FBNormalizedLineDistanceFromPoint(fatLine, _endPoint1)) controlPoint1:CGPointMake(1.0/3.0, FBNormalizedLineDistanceFromPoint(fatLine, _controlPoint1)) controlPoint2:CGPointMake(2.0/3.0, FBNormalizedLineDistanceFromPoint(fatLine, _controlPoint2)) endPoint2:CGPointMake(1.0, FBNormalizedLineDistanceFromPoint(fatLine, _endPoint2))];
+    FBBezierCurve *distanceBezier = [FBBezierCurve bezierCurveWithEndPoint1:MWPointMake(0, FBNormalizedLineDistanceFromPoint(fatLine, _endPoint1)) controlPoint1:MWPointMake(1.0/3.0, FBNormalizedLineDistanceFromPoint(fatLine, _controlPoint1)) controlPoint2:MWPointMake(2.0/3.0, FBNormalizedLineDistanceFromPoint(fatLine, _controlPoint2)) endPoint2:MWPointMake(1.0, FBNormalizedLineDistanceFromPoint(fatLine, _endPoint2))];
+    
     NSArray *convexHull = [distanceBezier convexHull]; // the convex hull can be anywhere from 2 to 4 points.
     
     // Find intersections of convex hull with the fat line bounds
@@ -504,9 +522,9 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     for (NSUInteger i = 0; i < [convexHull count]; i++) {
         // Pull out the current line on the convex hull
         NSUInteger indexOfNext = i < ([convexHull count] - 1) ? i + 1 : 0;
-        CGPoint startPoint = [(MWPointValue *)[convexHull objectAtIndex:i] point];
-        CGPoint endPoint = [(MWPointValue *)[convexHull objectAtIndex:indexOfNext] point];
-        CGPoint intersectionPoint = CGPointZero;
+        MWPoint startPoint = [(MWPointValue *)[convexHull objectAtIndex:i] point];
+        MWPoint endPoint = [(MWPointValue *)[convexHull objectAtIndex:indexOfNext] point];
+        MWPoint intersectionPoint = MWPointZeroMake();
         
         // See if the segment of the convex hull intersects with the minimum fat line bounds
         if ( LineIntersectsHorizontalLine(startPoint, endPoint, bounds.minimum, &intersectionPoint) ) {
@@ -555,21 +573,21 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     if ( range.minimum == 1.0 )
         return upperCurve; // avoid the divide by zero below
     // We need to adjust the maximum parameter to fit on the new curve before we split again
-    CGFloat adjustedMaximum = (range.maximum - range.minimum) / (1.0 - range.minimum);
+    MWFloat adjustedMaximum = (range.maximum - range.minimum) / (1.0 - range.minimum);
     NSArray *curves2 = [upperCurve splitCurveAtParameter:adjustedMaximum];
     return [curves2 objectAtIndex:0];
 }
 
-- (CGPoint) pointAtParameter:(CGFloat)parameter leftBezierCurve:(FBBezierCurve **)leftBezierCurve rightBezierCurve:(FBBezierCurve **)rightBezierCurve
+- (MWPoint) pointAtParameter:(MWFloat)parameter leftBezierCurve:(FBBezierCurve **)leftBezierCurve rightBezierCurve:(FBBezierCurve **)rightBezierCurve
 {    
     // This method is a simple wrapper around the BezierWithPoints() helper function. It computes the 2D point at the given parameter,
     //  and (optionally) the resulting curves that splitting at the parameter would create.
     
-    CGPoint points[4] = { _endPoint1, _controlPoint1, _controlPoint2, _endPoint2 };
-    CGPoint leftCurve[4] = {};
-    CGPoint rightCurve[4] = {};
+    MWPoint points[4] = { _endPoint1, _controlPoint1, _controlPoint2, _endPoint2 };
+    MWPoint leftCurve[4] = {};
+    MWPoint rightCurve[4] = {};
 
-    CGPoint point = BezierWithPoints(3, points, parameter, leftCurve, rightCurve);
+    MWPoint point = BezierWithPoints(3, points, parameter, leftCurve, rightCurve);
     
     if ( leftBezierCurve != nil )
         *leftBezierCurve = [FBBezierCurve bezierCurveWithEndPoint1:leftCurve[0] controlPoint1:leftCurve[1] controlPoint2:leftCurve[2] endPoint2:leftCurve[3]];
@@ -578,7 +596,7 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     return point;
 }
 
-- (CGFloat) refineParameter:(CGFloat)parameter forPoint:(CGPoint)point
+- (MWFloat) refineParameter:(MWFloat)parameter forPoint:(MWPoint)point
 {
     // Use Newton's Method to refine our parameter. In general, that formula is:
     //
@@ -595,37 +613,37 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     //  f'(parameter) = (Q(parameter) - point) * Q''(parameter) + Q'(parameter) * Q'(parameter)
     //
     
-    CGPoint bezierPoints[4] = {_endPoint1, _controlPoint1, _controlPoint2, _endPoint2};
+    MWPoint bezierPoints[4] = {_endPoint1, _controlPoint1, _controlPoint2, _endPoint2};
     
     // Compute Q(parameter)
-    CGPoint qAtParameter = BezierWithPoints(3, bezierPoints, parameter, nil, nil);
+    MWPoint qAtParameter = BezierWithPoints(3, bezierPoints, parameter, nil, nil);
     
     // Compute Q'(parameter)
-    CGPoint qPrimePoints[3] = {};
+    MWPoint qPrimePoints[3] = {};
     for (NSUInteger i = 0; i < 3; i++) {
         qPrimePoints[i].x = (bezierPoints[i + 1].x - bezierPoints[i].x) * 3.0;
         qPrimePoints[i].y = (bezierPoints[i + 1].y - bezierPoints[i].y) * 3.0;
     }
-    CGPoint qPrimeAtParameter = BezierWithPoints(2, qPrimePoints, parameter, nil, nil);
+    MWPoint qPrimeAtParameter = BezierWithPoints(2, qPrimePoints, parameter, nil, nil);
     
     // Compute Q''(parameter)
-    CGPoint qPrimePrimePoints[2] = {};
+    MWPoint qPrimePrimePoints[2] = {};
     for (NSUInteger i = 0; i < 2; i++) {
         qPrimePrimePoints[i].x = (qPrimePoints[i + 1].x - qPrimePoints[i].x) * 2.0;
         qPrimePrimePoints[i].y = (qPrimePoints[i + 1].y - qPrimePoints[i].y) * 2.0;        
     }
-    CGPoint qPrimePrimeAtParameter = BezierWithPoints(1, qPrimePrimePoints, parameter, nil, nil);
+    MWPoint qPrimePrimeAtParameter = BezierWithPoints(1, qPrimePrimePoints, parameter, nil, nil);
     
     // Compute f(parameter) and f'(parameter)
-    CGPoint qMinusPoint = FBSubtractPoint(qAtParameter, point);
-    CGFloat fAtParameter = FBDotMultiplyPoint(qMinusPoint, qPrimeAtParameter);
-    CGFloat fPrimeAtParameter = FBDotMultiplyPoint(qMinusPoint, qPrimePrimeAtParameter) + FBDotMultiplyPoint(qPrimeAtParameter, qPrimeAtParameter);
+    MWPoint qMinusPoint = FBSubtractPoint(qAtParameter, point);
+    MWFloat fAtParameter = FBDotMultiplyPoint(qMinusPoint, qPrimeAtParameter);
+    MWFloat fPrimeAtParameter = FBDotMultiplyPoint(qMinusPoint, qPrimePrimeAtParameter) + FBDotMultiplyPoint(qPrimeAtParameter, qPrimeAtParameter);
     
     // Newton's method!
     return parameter - (fAtParameter / fPrimeAtParameter);
 }
 
-- (NSArray *) splitCurveAtParameter:(CGFloat)parameter
+- (NSArray *) splitCurveAtParameter:(MWFloat)parameter
 {
     // Convience method that returns the result of splitting at the given parameter
     FBBezierCurve *leftCurve = nil;
@@ -655,9 +673,9 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
 
     // First, find the point that is on the bottom right, and move it to the first position in our array.
     NSUInteger lowestIndex = 0;
-    CGPoint lowestValue = [(MWPointValue *)[points objectAtIndex:0] point];
+    MWPoint lowestValue = [(MWPointValue *)[points objectAtIndex:0] point];
     for (NSUInteger i = 0; i < [points count]; i++) {
-        CGPoint point = [(MWPointValue *)[points objectAtIndex:i] point];
+        MWPoint point = [(MWPointValue *)[points objectAtIndex:i] point];
         if ( point.y < lowestValue.y || (point.y == lowestValue.y && point.x > lowestValue.x) ) {
             lowestIndex = i;
             lowestValue = point;
@@ -669,25 +687,25 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     //  Remember any redundant (i.e. colinear) points so we can remove them later.
     NSMutableArray *pointsToDelete = [NSMutableArray arrayWithCapacity:4];
     [points sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        CGPoint point1 = [(MWPointValue *)obj1 point];
-        CGPoint point2 = [(MWPointValue *)obj2 point];
+        MWPoint point1 = [(MWPointValue *)obj1 point];
+        MWPoint point2 = [(MWPointValue *)obj2 point];
         
         // Special case: Our pivot value (lowestValue, at index 0) should stay at the lowest
-        if ( CGPointEqualToPoint(lowestValue, point1) )
+        if ( MWPointEqualToPoint(lowestValue, point1) )
             return NSOrderedAscending;
-        if ( CGPointEqualToPoint(lowestValue, point2) )
+        if ( MWPointEqualToPoint(lowestValue, point2) )
             return NSOrderedDescending;
         
         // We don't care about the actual angle value, just their values relative to each other.
         //  Compute the signed area of the triangle the points form, as a quick estimate of
         //  where the points lie relative to each other.
-        CGFloat area = CounterClockwiseTurn(lowestValue, point1, point2);
+        MWFloat area = CounterClockwiseTurn(lowestValue, point1, point2);
         if ( FBAreValuesClose(area, 0.0) ) {
             // Ugh, the points are colinear. That means at least one of the points is going
             //  to be redundant, specifically the one closest to the pivot point. Remember
             //  the redundant point so it can be deleted later.
-            CGFloat distance1 = FBDistanceBetweenPoints(point1, lowestValue);
-            CGFloat distance2 = FBDistanceBetweenPoints(point2, lowestValue);
+            MWFloat distance1 = FBDistanceBetweenPoints(point1, lowestValue);
+            MWFloat distance2 = FBDistanceBetweenPoints(point2, lowestValue);
             // The three points are colinear, so base it on distance instead
             if ( distance1 < distance2 ) {
                 [pointsToDelete addObject:obj1];
@@ -720,14 +738,15 @@ static CGPoint BezierWithPoints(NSUInteger degree, CGPoint *bezierPoints, CGFloa
     [results addObject:[points objectAtIndex:1]];
     NSUInteger i = 2;
     NSUInteger pointsCount = [points count];
+
     while ( i < pointsCount ) {
-        CGPoint lastPoint = [(MWPointValue *)[results lastObject] point];
-        
         // TODO: sometimes there is only one point left in results, which leads to a crash. This never happens on OS X!
-        
-        CGPoint nextToLastPoint = [(MWPointValue *)[results objectAtIndex:[results count] - 2] point];
-        CGPoint pointUnderConsideration = [(MWPointValue *)[points objectAtIndex:i] point];
-        CGFloat area = CounterClockwiseTurn(nextToLastPoint, lastPoint, pointUnderConsideration);
+
+        MWPoint lastPoint = [(MWPointValue *)[results lastObject] point];
+        MWPoint nextToLastPoint = [(MWPointValue *)[results objectAtIndex:[results count] - 2] point];
+        MWPoint pointUnderConsideration = [(MWPointValue *)[points objectAtIndex:i] point];
+        MWFloat area = CounterClockwiseTurn(nextToLastPoint, lastPoint, pointUnderConsideration);
+
         if ( area > 0.0 ) {
             // Turning left is good, so keep going
             [results addObject:[points objectAtIndex:i]];

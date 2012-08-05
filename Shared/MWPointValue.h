@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 Martin Winter. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "MWGeometry.h"
 
 @interface MWPointValue : NSObject
 
-- (id)initWithPoint:(CGPoint)point;
-- (CGPoint)point;
+- (id)initWithPoint:(MWPoint)point;
+- (MWPoint)point;
 
 @end

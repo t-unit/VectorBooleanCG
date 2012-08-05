@@ -6,7 +6,7 @@
 //  Copyright 2011 Fortunate Bear, LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "MWGeometry.h"
 
 @class FBBezierCurve;
 @class FBEdgeCrossing;
@@ -20,7 +20,7 @@ typedef enum FBContourInside {
 //  can be filled or represent a hole in another contour.
 @interface FBBezierContour : NSObject<NSCopying> {
     NSMutableArray *_edges;
-    CGRect _bounds;
+    MWRect _bounds;
     FBContourInside _inside;
 }
 
@@ -32,14 +32,14 @@ typedef enum FBContourInside {
 - (void) addReverseCurve:(FBBezierCurve *)curve;
 - (void) addReverseCurveFrom:(FBEdgeCrossing *)startCrossing to:(FBEdgeCrossing *)endCrossing;
 
-- (BOOL) containsPoint:(CGPoint)point;
+- (BOOL) containsPoint:(MWPoint)point;
 - (void) markCrossingsAsEntryOrExitWithContour:(FBBezierContour *)otherContour markInside:(BOOL)markInside;
 
 - (void) round;
 
 @property (readonly) NSArray *edges;
-@property (readonly) CGRect bounds;
-@property (readonly) CGPoint firstPoint;
+@property (readonly) MWRect bounds;
+@property (readonly) MWPoint firstPoint;
 @property FBContourInside inside;
 @property (readonly) NSArray *intersectingContours;
 

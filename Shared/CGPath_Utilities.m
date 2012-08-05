@@ -165,7 +165,7 @@ void CGPath_MWElementAtIndex_ApplierFunction ( void *info, const CGPathElement *
             break;
             
         case kCGPathElementCloseSubpath:
-            pointCount = 1; // This _must_ be one (as opposed to when logging)!
+            pointCount = 1; // This must be one (as opposed to when logging)!
             break;
             
         default:
@@ -201,7 +201,7 @@ void CGPath_MWElementCount_ApplierFunction ( void *info, const CGPathElement *el
 
 NSString * CGPath_MWLog ( CGPathRef path )
 {
-    NSMutableString *string = [NSMutableString stringWithFormat:@"CGPath <%#lx>", (NSUInteger)path];
+    NSMutableString *string = [NSMutableString stringWithFormat:@"CGPath <%#llx>", (u_int64_t)path];
     
     CGRect bounds = CGPathGetPathBoundingBox(path);
     [string appendFormat:@"\n  Bounds: {{%f, %f}, {%f, %f}}",

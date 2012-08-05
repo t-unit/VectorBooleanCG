@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		696C4B7715CF1AAA00CC9532 /* MWGeometry.c in Sources */ = {isa = PBXBuildFile; fileRef = 696C4B7615CF1AAA00CC9532 /* MWGeometry.c */; };
+		696C4B7815CF1AAA00CC9532 /* MWGeometry.c in Sources */ = {isa = PBXBuildFile; fileRef = 696C4B7615CF1AAA00CC9532 /* MWGeometry.c */; };
 		697B1F8815CB09D100B39D76 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 697B1F8715CB09D100B39D76 /* UIKit.framework */; };
 		697B1F8A15CB09D100B39D76 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 697B1F8915CB09D100B39D76 /* Foundation.framework */; };
 		697B1F8C15CB09D100B39D76 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 697B1F8B15CB09D100B39D76 /* CoreGraphics.framework */; };
@@ -37,8 +39,8 @@
 		69879B0915CBD7AC000520AA /* FBDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879AF115CBD7AC000520AA /* FBDebug.m */; };
 		69879B0A15CBD7AC000520AA /* FBEdgeCrossing.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879AF315CBD7AC000520AA /* FBEdgeCrossing.m */; };
 		69879B0B15CBD7AC000520AA /* FBEdgeCrossing.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879AF315CBD7AC000520AA /* FBEdgeCrossing.m */; };
-		69879B0C15CBD7AC000520AA /* Geometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879AF515CBD7AC000520AA /* Geometry.m */; };
-		69879B0D15CBD7AC000520AA /* Geometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879AF515CBD7AC000520AA /* Geometry.m */; };
+		69879B0C15CBD7AC000520AA /* FBGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879AF515CBD7AC000520AA /* FBGeometry.m */; };
+		69879B0D15CBD7AC000520AA /* FBGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879AF515CBD7AC000520AA /* FBGeometry.m */; };
 		69879B0E15CBD7AC000520AA /* MWPointValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879AF715CBD7AC000520AA /* MWPointValue.m */; };
 		69879B0F15CBD7AC000520AA /* MWPointValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879AF715CBD7AC000520AA /* MWPointValue.m */; };
 		69879B2215CBE249000520AA /* CanvasView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69879B2115CBE249000520AA /* CanvasView.m */; };
@@ -59,6 +61,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6942FC0115CF1012009D454A /* MWGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = MWGeometry.h; path = Shared/MWGeometry.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		696C4B7615CF1AAA00CC9532 /* MWGeometry.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = MWGeometry.c; path = Shared/MWGeometry.c; sourceTree = "<group>"; };
 		697B1F8515CB09D100B39D76 /* VectorBooleanMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VectorBooleanMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		697B1F8715CB09D100B39D76 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		697B1F8915CB09D100B39D76 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -74,36 +78,36 @@
 		697B1F9F15CB09D100B39D76 /* MWViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWViewController.h; sourceTree = "<group>"; };
 		697B1FA015CB09D100B39D76 /* MWViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MWViewController.m; sourceTree = "<group>"; };
 		697B1FD615CB24ED00B39D76 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
-		69879AE015CBD7AC000520AA /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Canvas.h; path = Shared/Canvas.h; sourceTree = "<group>"; };
-		69879AE115CBD7AC000520AA /* Canvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Canvas.m; path = Shared/Canvas.m; sourceTree = "<group>"; };
+		69879AE015CBD7AC000520AA /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Canvas.h; path = Shared/Canvas.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		69879AE115CBD7AC000520AA /* Canvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = Canvas.m; path = Shared/Canvas.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		69879AE215CBD7AC000520AA /* CGPath_Boolean.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGPath_Boolean.h; path = Shared/CGPath_Boolean.h; sourceTree = "<group>"; };
 		69879AE315CBD7AC000520AA /* CGPath_Boolean.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CGPath_Boolean.m; path = Shared/CGPath_Boolean.m; sourceTree = "<group>"; };
-		69879AE415CBD7AC000520AA /* CGPath_Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGPath_Utilities.h; path = Shared/CGPath_Utilities.h; sourceTree = "<group>"; };
-		69879AE515CBD7AC000520AA /* CGPath_Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CGPath_Utilities.m; path = Shared/CGPath_Utilities.m; sourceTree = "<group>"; };
-		69879AE615CBD7AC000520AA /* FBBezierContour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBBezierContour.h; path = Shared/FBBezierContour.h; sourceTree = "<group>"; };
-		69879AE715CBD7AC000520AA /* FBBezierContour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBBezierContour.m; path = Shared/FBBezierContour.m; sourceTree = "<group>"; };
-		69879AE815CBD7AC000520AA /* FBBezierCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBBezierCurve.h; path = Shared/FBBezierCurve.h; sourceTree = "<group>"; };
-		69879AE915CBD7AC000520AA /* FBBezierCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBBezierCurve.m; path = Shared/FBBezierCurve.m; sourceTree = "<group>"; };
-		69879AEA15CBD7AC000520AA /* FBBezierGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBBezierGraph.h; path = Shared/FBBezierGraph.h; sourceTree = "<group>"; };
-		69879AEB15CBD7AC000520AA /* FBBezierGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBBezierGraph.m; path = Shared/FBBezierGraph.m; sourceTree = "<group>"; };
-		69879AEC15CBD7AC000520AA /* FBBezierIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBBezierIntersection.h; path = Shared/FBBezierIntersection.h; sourceTree = "<group>"; };
-		69879AED15CBD7AC000520AA /* FBBezierIntersection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBBezierIntersection.m; path = Shared/FBBezierIntersection.m; sourceTree = "<group>"; };
+		69879AE415CBD7AC000520AA /* CGPath_Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CGPath_Utilities.h; path = Shared/CGPath_Utilities.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		69879AE515CBD7AC000520AA /* CGPath_Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CGPath_Utilities.m; path = Shared/CGPath_Utilities.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		69879AE615CBD7AC000520AA /* FBBezierContour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = FBBezierContour.h; path = Shared/FBBezierContour.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		69879AE715CBD7AC000520AA /* FBBezierContour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = FBBezierContour.m; path = Shared/FBBezierContour.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		69879AE815CBD7AC000520AA /* FBBezierCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = FBBezierCurve.h; path = Shared/FBBezierCurve.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		69879AE915CBD7AC000520AA /* FBBezierCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = FBBezierCurve.m; path = Shared/FBBezierCurve.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		69879AEA15CBD7AC000520AA /* FBBezierGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = FBBezierGraph.h; path = Shared/FBBezierGraph.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		69879AEB15CBD7AC000520AA /* FBBezierGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = FBBezierGraph.m; path = Shared/FBBezierGraph.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		69879AEC15CBD7AC000520AA /* FBBezierIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = FBBezierIntersection.h; path = Shared/FBBezierIntersection.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		69879AED15CBD7AC000520AA /* FBBezierIntersection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = FBBezierIntersection.m; path = Shared/FBBezierIntersection.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		69879AEE15CBD7AC000520AA /* FBContourEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBContourEdge.h; path = Shared/FBContourEdge.h; sourceTree = "<group>"; };
 		69879AEF15CBD7AC000520AA /* FBContourEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBContourEdge.m; path = Shared/FBContourEdge.m; sourceTree = "<group>"; };
 		69879AF015CBD7AC000520AA /* FBDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBDebug.h; path = Shared/FBDebug.h; sourceTree = "<group>"; };
 		69879AF115CBD7AC000520AA /* FBDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBDebug.m; path = Shared/FBDebug.m; sourceTree = "<group>"; };
-		69879AF215CBD7AC000520AA /* FBEdgeCrossing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBEdgeCrossing.h; path = Shared/FBEdgeCrossing.h; sourceTree = "<group>"; };
-		69879AF315CBD7AC000520AA /* FBEdgeCrossing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBEdgeCrossing.m; path = Shared/FBEdgeCrossing.m; sourceTree = "<group>"; };
-		69879AF415CBD7AC000520AA /* Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Geometry.h; path = Shared/Geometry.h; sourceTree = "<group>"; };
-		69879AF515CBD7AC000520AA /* Geometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Geometry.m; path = Shared/Geometry.m; sourceTree = "<group>"; };
-		69879AF615CBD7AC000520AA /* MWPointValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWPointValue.h; path = Shared/MWPointValue.h; sourceTree = "<group>"; };
-		69879AF715CBD7AC000520AA /* MWPointValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWPointValue.m; path = Shared/MWPointValue.m; sourceTree = "<group>"; };
+		69879AF215CBD7AC000520AA /* FBEdgeCrossing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = FBEdgeCrossing.h; path = Shared/FBEdgeCrossing.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		69879AF315CBD7AC000520AA /* FBEdgeCrossing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = FBEdgeCrossing.m; path = Shared/FBEdgeCrossing.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		69879AF415CBD7AC000520AA /* FBGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = FBGeometry.h; path = Shared/FBGeometry.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		69879AF515CBD7AC000520AA /* FBGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = FBGeometry.m; path = Shared/FBGeometry.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		69879AF615CBD7AC000520AA /* MWPointValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = MWPointValue.h; path = Shared/MWPointValue.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		69879AF715CBD7AC000520AA /* MWPointValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MWPointValue.m; path = Shared/MWPointValue.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		69879B2015CBE249000520AA /* CanvasView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasView.h; sourceTree = "<group>"; };
-		69879B2115CBE249000520AA /* CanvasView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasView.m; sourceTree = "<group>"; };
+		69879B2115CBE249000520AA /* CanvasView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CanvasView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		69879B2315CBE256000520AA /* CanvasView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasView.h; sourceTree = "<group>"; };
-		69879B2415CBE256000520AA /* CanvasView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasView.m; sourceTree = "<group>"; };
+		69879B2415CBE256000520AA /* CanvasView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CanvasView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		69879B2615CBF676000520AA /* CanvasController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CanvasController.h; path = Shared/CanvasController.h; sourceTree = "<group>"; };
-		69879B2715CBF676000520AA /* CanvasController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CanvasController.m; path = Shared/CanvasController.m; sourceTree = "<group>"; };
+		69879B2715CBF676000520AA /* CanvasController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CanvasController.m; path = Shared/CanvasController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		69879B2A15CBFD73000520AA /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		69879B2B15CBFD73000520AA /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		699EB2B015CC111000F387FB /* MWShapesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWShapesTableViewController.h; sourceTree = "<group>"; };
@@ -211,8 +215,8 @@
 				69879AE115CBD7AC000520AA /* Canvas.m */,
 				69879B2615CBF676000520AA /* CanvasController.h */,
 				69879B2715CBF676000520AA /* CanvasController.m */,
-				69879AF415CBD7AC000520AA /* Geometry.h */,
-				69879AF515CBD7AC000520AA /* Geometry.m */,
+				69879AF415CBD7AC000520AA /* FBGeometry.h */,
+				69879AF515CBD7AC000520AA /* FBGeometry.m */,
 				69879AEA15CBD7AC000520AA /* FBBezierGraph.h */,
 				69879AEB15CBD7AC000520AA /* FBBezierGraph.m */,
 				69879AE615CBD7AC000520AA /* FBBezierContour.h */,
@@ -231,6 +235,8 @@
 				69879AE315CBD7AC000520AA /* CGPath_Boolean.m */,
 				69879AE415CBD7AC000520AA /* CGPath_Utilities.h */,
 				69879AE515CBD7AC000520AA /* CGPath_Utilities.m */,
+				6942FC0115CF1012009D454A /* MWGeometry.h */,
+				696C4B7615CF1AAA00CC9532 /* MWGeometry.c */,
 				69879AF615CBD7AC000520AA /* MWPointValue.h */,
 				69879AF715CBD7AC000520AA /* MWPointValue.m */,
 			);
@@ -410,13 +416,14 @@
 				69879B0715CBD7AC000520AA /* FBContourEdge.m in Sources */,
 				69879B0915CBD7AC000520AA /* FBDebug.m in Sources */,
 				69879B0B15CBD7AC000520AA /* FBEdgeCrossing.m in Sources */,
-				69879B0D15CBD7AC000520AA /* Geometry.m in Sources */,
+				69879B0D15CBD7AC000520AA /* FBGeometry.m in Sources */,
 				69879B0F15CBD7AC000520AA /* MWPointValue.m in Sources */,
 				69879B2515CBE256000520AA /* CanvasView.m in Sources */,
 				69879B2915CBF676000520AA /* CanvasController.m in Sources */,
 				699EB2B215CC111000F387FB /* MWShapesTableViewController.m in Sources */,
 				699EB2B915CC195D00F387FB /* MWOperationsTableViewController.m in Sources */,
 				699EB2C415CC24E200F387FB /* MWOptionsTableViewController.m in Sources */,
+				696C4B7815CF1AAA00CC9532 /* MWGeometry.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,11 +443,12 @@
 				69879B0615CBD7AC000520AA /* FBContourEdge.m in Sources */,
 				69879B0815CBD7AC000520AA /* FBDebug.m in Sources */,
 				69879B0A15CBD7AC000520AA /* FBEdgeCrossing.m in Sources */,
-				69879B0C15CBD7AC000520AA /* Geometry.m in Sources */,
+				69879B0C15CBD7AC000520AA /* FBGeometry.m in Sources */,
 				69879B0E15CBD7AC000520AA /* MWPointValue.m in Sources */,
 				69879B2215CBE249000520AA /* CanvasView.m in Sources */,
 				69879B2815CBF676000520AA /* CanvasController.m in Sources */,
 				69879B2C15CBFD73000520AA /* AppDelegate.m in Sources */,
+				696C4B7715CF1AAA00CC9532 /* MWGeometry.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -510,11 +518,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Martin Winter (58BQ72GH5Y)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -531,6 +540,7 @@
 				INFOPLIST_FILE = "VectorBooleanMobile/VectorBooleanMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "558B5349-BEB1-46DE-9885-2BFFA621C1A4";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -541,11 +551,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Martin Winter";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -558,6 +569,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A2815D50-59F9-4B4E-9ED2-B5EA313025BE";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -568,7 +580,7 @@
 		A1C48B521395FA390043E2C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -580,14 +592,14 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = "";
 			};
 			name = Debug;
 		};
 		A1C48B531395FA390043E2C7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -595,7 +607,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				SDKROOT = iphoneos;
+				SDKROOT = "";
 			};
 			name = Release;
 		};
@@ -612,6 +624,7 @@
 				INFOPLIST_FILE = "VectorBoolean/VectorBoolean-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -629,6 +642,7 @@
 				INFOPLIST_FILE = "VectorBoolean/VectorBoolean-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

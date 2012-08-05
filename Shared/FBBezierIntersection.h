@@ -6,6 +6,7 @@
 //  Copyright 2011 Fortunate Bear, LLC. All rights reserved.
 //
 
+#import "MWGeometry.h"
 @class FBBezierCurve;
 
 // FBBezierIntersection stores where two bezier curves intersect. Initially it just stores
@@ -14,14 +15,14 @@
 //  the intersection point, if the intersection is tangent. 
 @interface FBBezierIntersection : NSObject
 
-+ (id) intersectionWithCurve1:(FBBezierCurve *)curve1 parameter1:(CGFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(CGFloat)parameter2;
-- (id) initWithCurve1:(FBBezierCurve *)curve1 parameter1:(CGFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(CGFloat)parameter2;
++ (id) intersectionWithCurve1:(FBBezierCurve *)curve1 parameter1:(MWFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(MWFloat)parameter2;
+- (id) initWithCurve1:(FBBezierCurve *)curve1 parameter1:(MWFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(MWFloat)parameter2;
 
-@property (readonly) CGPoint location;
+@property (readonly) MWPoint location;
 @property (readonly, retain) FBBezierCurve *curve1;
-@property (readonly) CGFloat parameter1;
+@property (readonly) MWFloat parameter1;
 @property (readonly, retain) FBBezierCurve *curve2;
-@property (readonly) CGFloat parameter2;
+@property (readonly) MWFloat parameter2;
 @property (readonly, getter = isTangent) BOOL tangent;
 @property (readonly) FBBezierCurve *curve1LeftBezier;
 @property (readonly) FBBezierCurve *curve1RightBezier;

@@ -6,7 +6,7 @@
 //  Copyright 2011 Fortunate Bear, LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "MWGeometry.h"
 
 @class FBBezierIntersection;
 @class FBContourEdge;
@@ -27,7 +27,7 @@
 
 @property (assign) FBContourEdge *edge;
 @property (assign) FBEdgeCrossing *counterpart;
-@property (readonly) CGFloat order;
+@property (readonly) MWFloat order;
 @property (getter = isEntry) BOOL entry;
 @property (getter = isProcessed) BOOL processed;
 @property NSUInteger index;
@@ -37,12 +37,12 @@
 @property (readonly) FBEdgeCrossing *previous;
 
 // These properties pass through to the underlying intersection
-@property (readonly) CGFloat parameter;
+@property (readonly) MWFloat parameter;
 @property (readonly) FBBezierCurve *curve;
 @property (readonly) FBBezierCurve *leftCurve;
 @property (readonly) FBBezierCurve *rightCurve;
 @property (readonly, getter = isAtStart) BOOL atStart;
 @property (readonly, getter = isAtEnd) BOOL atEnd;
-@property (readonly) CGPoint location;
+@property (readonly) MWPoint location;
 
 @end

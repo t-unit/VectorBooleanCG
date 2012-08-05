@@ -335,10 +335,10 @@
 
 - (void) addQuadrangle:(CGPoint)point1 point2:(CGPoint)point2 point3:(CGPoint)point3 point4:(CGPoint)point4
 {
-    CGMutablePathRef quandrangle = CGPathCreateMutable();
-    [self addQuadrangle:point1 point2:point2 point3:point3 point4:point4 toPath:quandrangle];
-    [self.canvas addPath:quandrangle withColor:[[COLOR_CLASS redColor] CGColor]];
-    CGPathRelease(quandrangle);
+    CGMutablePathRef quadrangle = CGPathCreateMutable();
+    [self addQuadrangle:point1 point2:point2 point3:point3 point4:point4 toPath:quadrangle];
+    [self.canvas addPath:quadrangle withColor:[[COLOR_CLASS redColor] CGColor]];
+    CGPathRelease(quadrangle);
 }
 
 - (void) addRectangle:(CGRect)rect toPath:(CGMutablePathRef)rectangle
@@ -355,6 +355,9 @@
     CGPathAddCurveToPoint(circle, NULL, center.x + controlPointLength, center.y + radius, center.x + radius, center.y + controlPointLength, center.x + radius, center.y);
     CGPathAddCurveToPoint(circle, NULL, center.x + radius, center.y - controlPointLength, center.x + controlPointLength, center.y - radius, center.x, center.y - radius);
     CGPathAddCurveToPoint(circle, NULL, center.x - controlPointLength, center.y - radius, center.x - radius, center.y - controlPointLength, center.x - radius, center.y);
+    
+    //MWRect rect = MWRectMake(center.x - radius, center.y - radius, 2.0 * radius, 2.0 * radius);
+    //CGPathAddEllipseInRect(circle, NULL, rect);
 }
 
 - (void) addTriangle:(CGPoint)point1 point2:(CGPoint)point2 point3:(CGPoint)point3 toPath:(CGMutablePathRef)path

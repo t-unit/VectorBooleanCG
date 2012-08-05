@@ -11,16 +11,18 @@
 
 @implementation MWPointValue
 {
-    NSDictionary *_dictionary;
+    NSNumber *_xNumber;
+    NSNumber *_yNumber;
 }
 
 
-- (id)initWithPoint:(CGPoint)point
+- (id)initWithPoint:(MWPoint)point
 {
     self = [super init];
     if (self)
     {
-        _dictionary = (NSDictionary *)CFBridgingRelease(CGPointCreateDictionaryRepresentation(point));
+        _xNumber = [NSNumber numberWithDouble:point.x];
+        _yNumber = [NSNumber numberWithDouble:point.y];
     }
     return self;
 }
@@ -28,15 +30,21 @@
 
 - (id)init
 {
-    return [self initWithPoint:CGPointZero];
+    return [self initWithPoint:MWPointZeroMake()];
 }
 
 
-- (CGPoint)point
+- (NSString *)description
 {
-    CGPoint point;
-    bool success = CGPointMakeWithDictionaryRepresentation((__bridge CFDictionaryRef)(_dictionary), &point);
-    return (success) ? point : CGPointZero;
+    MWPoint point = [self point];
+    return [NSString stringWithFormat:@"<%@ %#llx {%f, %f}>",
+            NSStringFromClass([self class]), (u_int64_t)self, point.x, point.y];
+}
+
+
+- (MWPoint)point
+{
+    return MWPointMake([_xNumber doubleValue], [_yNumber doubleValue]);
 }
 
 

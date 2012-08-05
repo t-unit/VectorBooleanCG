@@ -22,7 +22,7 @@
 
 static CGRect BoxFrame(CGPoint point)
 {
-    return CGRectMake(floorf(point.x - 2) - 0.5, floorf(point.y - 2) - 0.5, 5, 5);
+    return CGRectMake(floor(point.x - 2) - 0.5, floor(point.y - 2) - 0.5, 5, 5);
 }
 
 @implementation Canvas
@@ -37,6 +37,9 @@ static CGRect BoxFrame(CGPoint point)
         _paths = [[NSMutableArray alloc] initWithCapacity:3];
         _showPoints = YES;
         _showIntersections = YES;
+        
+        //NSLog(@"%s  size of CGFloat: %lu", __PRETTY_FUNCTION__, sizeof(CGFloat));
+        //NSLog(@"%s  size of double: %lu", __PRETTY_FUNCTION__, sizeof(double));
     }
     
     return self;
@@ -66,6 +69,13 @@ static CGRect BoxFrame(CGPoint point)
 
 - (void) drawRect:(CGRect)dirtyRect inContext:(CGContextRef)context
 {
+    // On iOS, flip vertically.
+#if TARGET_OS_IPHONE
+    CGContextSaveGState(context);
+    CGContextTranslateCTM(context, 0.0, dirtyRect.size.height); // Assume dirtyRect to be equal to the view’s height.
+    CGContextScaleCTM(context, 1.0, -1.0);
+#endif
+    
     // Draw on a background
     [[COLOR_CLASS whiteColor] set];
     CGContextFillRect(context, dirtyRect);
@@ -76,7 +86,11 @@ static CGRect BoxFrame(CGPoint point)
         CGPathRef path = (__bridge CGPathRef)([object objectForKey:@"path"]);
         CGContextSetFillColorWithColor(context, color);
         CGContextAddPath(context, path);
-        CGContextFillPath(context);
+
+        // The algorithms in this project require the even-odd fill rule. Since
+        // the fill rule is not part of CGPath objects, we must set it
+        // explicitly when filling.
+        CGContextEOFillPath(context);
     }    
     
     // Draw on the end and control points
@@ -117,7 +131,7 @@ static CGRect BoxFrame(CGPoint point)
                         [[COLOR_CLASS purpleColor] set];
                     else
                         [[COLOR_CLASS greenColor] set];
-                    CGPathRef circle = CGPathCreateWithEllipseInRect(BoxFrame(intersection.location), NULL);
+                    CGPathRef circle = CGPathCreateWithEllipseInRect(BoxFrame(MWPointToCGPoint(intersection.location)), NULL);
                     CGContextAddPath(context, circle);
                     CGContextStrokePath(context);
                     CGPathRelease(circle);
@@ -125,6 +139,10 @@ static CGRect BoxFrame(CGPoint point)
             }
         }
     }
+
+#if TARGET_OS_IPHONE
+    CGContextRestoreGState(context);
+#endif
 }
 
 @end

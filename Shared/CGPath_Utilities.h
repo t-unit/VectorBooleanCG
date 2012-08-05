@@ -16,6 +16,8 @@
 #import <ApplicationServices/ApplicationServices.h>
 #endif
 
+#import "MWGeometry.h"
+
 
 typedef struct {
     CGPathElementType kind;

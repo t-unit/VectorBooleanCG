@@ -34,7 +34,7 @@
     [_edge removeCrossing:self];
 }
 
-- (CGFloat) order
+- (MWFloat) order
 {
     return self.parameter;
 }
@@ -55,7 +55,7 @@
     return [self.edge.crossings objectAtIndex:_index - 1];
 }
 
-- (CGFloat) parameter
+- (MWFloat) parameter
 {
     if ( self.edge.curve == _intersection.curve1 )
         return _intersection.parameter1;
@@ -63,7 +63,7 @@
     return _intersection.parameter2;
 }
 
-- (CGPoint) location
+- (MWPoint) location
 {
     return _intersection.location;
 }

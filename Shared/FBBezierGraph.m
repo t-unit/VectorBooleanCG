@@ -14,16 +14,16 @@
 #import "FBBezierIntersection.h"
 #import "FBEdgeCrossing.h"
 #import "FBDebug.h"
-#import "Geometry.h"
+#import "FBGeometry.h"
 #import <math.h>
 
 //////////////////////////////////////////////////////////////////////////
 // Helper methods for angles
 //
-static const CGFloat FB2PI = 2.0 * M_PI;
+static const MWFloat FB2PI = 2.0 * M_PI;
 
 // Normalize the angle between 0 and 2pi
-static CGFloat NormalizeAngle(CGFloat value)
+static MWFloat NormalizeAngle(MWFloat value)
 {
     while ( value < 0.0 )
         value += FB2PI;
@@ -33,16 +33,16 @@ static CGFloat NormalizeAngle(CGFloat value)
 }
 
 // Compute the polar angle from the cartesian point
-static CGFloat PolarAngle(CGPoint point)
+static MWFloat PolarAngle(MWPoint point)
 {
-    CGFloat value = 0.0;
+    MWFloat value = 0.0;
     if ( point.x > 0.0 )
-        value = atanf(point.y / point.x);
+        value = atan(point.y / point.x);
     else if ( point.x < 0.0 ) {
         if ( point.y >= 0.0 )
-            value = atanf(point.y / point.x) + M_PI;
+            value = atan(point.y / point.x) + M_PI;
         else
-            value = atanf(point.y / point.x) - M_PI;
+            value = atan(point.y / point.x) - M_PI;
     } else {
         if ( point.y > 0.0 )
             value =  M_PI_2;
@@ -59,17 +59,17 @@ static CGFloat PolarAngle(CGPoint point)
 //  and determine if a specific angle falls within. 
 //
 typedef struct FBAngleRange {
-    CGFloat minimum;
-    CGFloat maximum;
+    MWFloat minimum;
+    MWFloat maximum;
 } FBAngleRange;
 
-static FBAngleRange FBAngleRangeMake(CGFloat minimum, CGFloat maximum)
+static FBAngleRange FBAngleRangeMake(MWFloat minimum, MWFloat maximum)
 {
     FBAngleRange range = { minimum, maximum };
     return range;
 }
 
-static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
+static BOOL FBAngleRangeContainsAngle(FBAngleRange range, MWFloat angle)
 {
     if ( range.minimum <= range.maximum )
         return angle > range.minimum && angle < range.maximum;
@@ -111,9 +111,9 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
 - (BOOL) containsContour:(FBBezierContour *)contour;
 - (FBBezierContour *) containerForContour:(FBBezierContour *)testContour;
 - (BOOL) eliminateContainers:(NSMutableArray *)containers thatDontContainContour:(FBBezierContour *)testContour usingRay:(FBBezierCurve *)ray;
-- (BOOL) findBoundsOfContour:(FBBezierContour *)testContour onRay:(FBBezierCurve *)ray minimum:(CGPoint *)testMinimum maximum:(CGPoint *)testMaximum;
+- (BOOL) findBoundsOfContour:(FBBezierContour *)testContour onRay:(FBBezierCurve *)ray minimum:(MWPoint *)testMinimum maximum:(MWPoint *)testMaximum;
 - (void) removeContoursThatDontContain:(NSMutableArray *)crossings;
-- (BOOL) findCrossingsOnContainers:(NSArray *)containers onRay:(FBBezierCurve *)ray beforeMinimum:(CGPoint)testMinimum afterMaximum:(CGPoint)testMaximum crossingsBefore:(NSMutableArray *)crossingsBeforeMinimum crossingsAfter:(NSMutableArray *)crossingsAfterMaximum;
+- (BOOL) findCrossingsOnContainers:(NSArray *)containers onRay:(FBBezierCurve *)ray beforeMinimum:(MWPoint)testMinimum afterMaximum:(MWPoint)testMaximum crossingsBefore:(NSMutableArray *)crossingsBeforeMinimum crossingsAfter:(NSMutableArray *)crossingsAfterMaximum;
 - (void) removeCrossings:(NSMutableArray *)crossings forContours:(NSArray *)containersToRemove;
 - (void) removeContourCrossings:(NSMutableArray *)crossings1 thatDontAppearIn:(NSMutableArray *)crossings2;
 - (NSArray *) minimumCrossings:(NSArray *)crossings onRay:(FBBezierCurve *)ray;
@@ -122,7 +122,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
 - (NSUInteger) numberOfTimesContour:(FBBezierContour *)contour appearsInCrossings:(NSArray *)crossings;
 
 @property (readonly) NSArray *contours;
-@property (readonly) CGRect bounds;
+@property (readonly) MWRect bounds;
 
 @end
 
@@ -147,7 +147,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     if ( self != nil ) {
         // A bezier graph is made up of contours, which are closed paths of curves. Anytime we
         //  see a move to in the NSBezierPath, that's a new contour.
-        CGPoint lastPoint = CGPointZero;
+        MWPoint lastPoint = MWPointZeroMake();
         _contours = [[NSMutableArray alloc] initWithCapacity:2];
             
         FBBezierContour *contour = nil;
@@ -160,17 +160,17 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
                     // Start a new contour
                     contour = [[FBBezierContour alloc] init];
                     [self addContour:contour];
-                    lastPoint = element.point;
+                    lastPoint = MWPointFromCGPoint(element.point);
                     break;
                     
                 case kCGPathElementAddLineToPoint: {
                     // [MO] skip degenerate line segments
-                    if (!CGPointEqualToPoint(element.point, lastPoint)) {
+                    if (!MWPointEqualToPoint(MWPointFromCGPoint(element.point), lastPoint)) {
                         // Convert lines to bezier curves as well. Just set control point to be in the line formed
                         //  by the end points
-                        FBBezierCurve *curve = [FBBezierCurve bezierCurveWithLineStartPoint:lastPoint endPoint:element.point];
+                        FBBezierCurve *curve = [FBBezierCurve bezierCurveWithLineStartPoint:lastPoint endPoint:MWPointFromCGPoint(element.point)];
                         [contour addCurve:curve];
-                        lastPoint = element.point;
+                        lastPoint = MWPointFromCGPoint(element.point);
                     }
                     break;
                 }
@@ -178,11 +178,11 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
                 case kCGPathElementAddCurveToPoint:
                 {
                     FBBezierCurve *curve = [FBBezierCurve bezierCurveWithEndPoint1:lastPoint
-                                                                     controlPoint1:element.controlPoints[0]
-                                                                     controlPoint2:element.controlPoints[1]
-                                                                         endPoint2:element.point];
+                                                                     controlPoint1:MWPointFromCGPoint(element.controlPoints[0])
+                                                                     controlPoint2:MWPointFromCGPoint(element.controlPoints[1])
+                                                                         endPoint2:MWPointFromCGPoint(element.point)];
                     [contour addCurve:curve];
-                    lastPoint = element.point;
+                    lastPoint = MWPointFromCGPoint(element.point);
                     break;
                 }
                     
@@ -195,15 +195,15 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
                     
                     if ([[contour edges] count]) {
                         FBContourEdge *firstEdge = [[contour edges] objectAtIndex:0];
-                        CGPoint        firstPoint = [[firstEdge curve] endPoint1];
+                        MWPoint        firstPoint = [[firstEdge curve] endPoint1];
                         
                         // Skip degenerate line segments
-                        if (!CGPointEqualToPoint(lastPoint, firstPoint)) {
+                        if (!MWPointEqualToPoint(lastPoint, firstPoint)) {
                             FBBezierCurve *curve = [FBBezierCurve bezierCurveWithLineStartPoint:lastPoint endPoint:firstPoint];
                             [contour addCurve:curve];
                         }
                     }
-                    lastPoint = CGPointZero;
+                    lastPoint = MWPointZeroMake();
                     break;
                 
                 case kCGPathElementAddQuadCurveToPoint:
@@ -258,7 +258,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     // First insert FBEdgeCrossings into both graphs where the graphs
     //  cross.
     [self insertCrossingsWithBezierGraph:graph];
-    
+
     // Handle the parts of the graphs that intersect first. Mark the parts
     //  of the graphs that are outside the other for the final result.
     [self markCrossingsAsEntryOrExitWithBezierGraph:graph markInside:NO];
@@ -272,6 +272,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     //  completely contained in another contour, or disjoint.
     NSArray *ourNonintersectingContours = [self nonintersectingContours];
     NSArray *theirNonintersectinContours = [graph nonintersectingContours];
+
     // Since we're doing a union, assume all the non-crossing contours are in, and remove
     //  by exception when they're contained by another contour.
     NSMutableArray *finalNonintersectingContours = [ourNonintersectingContours mutableCopy];
@@ -288,7 +289,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
         if ( subjectContainsClip )
             [finalNonintersectingContours removeObject:theirContour];
     }
-
+    
     // Append the final nonintersecting contours
     for (FBBezierContour *contour in finalNonintersectingContours)
         [result addContour:contour];
@@ -439,14 +440,18 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
         BOOL firstPoint = YES;        
         for (FBContourEdge *edge in contour.edges) {
             if ( firstPoint ) {
-                CGPathMoveToPoint(path, NULL, edge.curve.endPoint1.x, edge.curve.endPoint1.y);
+                CGPoint endPoint1 = MWPointToCGPoint(edge.curve.endPoint1);
+                CGPathMoveToPoint(path, NULL, endPoint1.x, endPoint1.y);
                 firstPoint = NO;
             }
             
+            CGPoint controlPoint1 = MWPointToCGPoint(edge.curve.controlPoint1);
+            CGPoint controlPoint2 = MWPointToCGPoint(edge.curve.controlPoint2);
+            CGPoint endPoint2 = MWPointToCGPoint(edge.curve.endPoint2);
             CGPathAddCurveToPoint(path, NULL,
-                                  edge.curve.controlPoint1.x, edge.curve.controlPoint1.y,
-                                  edge.curve.controlPoint2.x, edge.curve.controlPoint2.y,
-                                  edge.curve.endPoint2.x, edge.curve.endPoint2.y);
+                                  controlPoint1.x, controlPoint1.y,
+                                  controlPoint2.x, controlPoint2.y,
+                                  endPoint2.x, endPoint2.y);
         }
     }
     
@@ -492,7 +497,9 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
 
                         // Don't add a crossing unless one edge actually crosses the other
                         if ( ![self doesEdge:ourEdge crossEdge:theirEdge atIntersection:intersection] )
+                        {
                             continue;
+                        }
 
                         // Add crossings to both graphs for this intersection, and point them at each other
                         FBEdgeCrossing *ourCrossing = [FBEdgeCrossing crossingWithIntersection:intersection];
@@ -504,7 +511,6 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
                     }
                 }
             }
-            
         }
     }
  
@@ -555,8 +561,8 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     
     // Calculate the four tangents: The two tangents moving away from the intersection point on edge1, the two tangents
     //  moving away from the intersection point on edge2.
-    CGPoint edge1Tangents[] = { CGPointZero, CGPointZero };
-    CGPoint edge2Tangents[] = { CGPointZero, CGPointZero };
+    MWPoint edge1Tangents[] = { MWPointZeroMake(), MWPointZeroMake() };
+    MWPoint edge2Tangents[] = { MWPointZeroMake(), MWPointZeroMake() };
     if ( intersection.isAtStartOfCurve1 ) {
         FBContourEdge *otherEdge1 = edge1.previous;
         edge1Tangents[0] = FBSubtractPoint(otherEdge1.curve.controlPoint2, otherEdge1.curve.endPoint2);
@@ -583,8 +589,8 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     }
 
     // Calculate angles for the tangents
-    CGFloat edge1Angles[] = { PolarAngle(edge1Tangents[0]), PolarAngle(edge1Tangents[1]) };
-    CGFloat edge2Angles[] = { PolarAngle(edge2Tangents[0]), PolarAngle(edge2Tangents[1]) };
+    MWFloat edge1Angles[] = { PolarAngle(edge1Tangents[0]), PolarAngle(edge1Tangents[1]) };
+    MWFloat edge2Angles[] = { PolarAngle(edge2Tangents[0]), PolarAngle(edge2Tangents[1]) };
     
     // Count how many times edge2 angles appear between the edge1 angles
     FBAngleRange range1 = FBAngleRangeMake(edge1Angles[0], edge1Angles[1]);
@@ -606,16 +612,16 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     return rangeCount1 == 1 && rangeCount2 == 1;
 }
 
-- (CGRect) bounds
+- (MWRect) bounds
 {
     // Compute the bounds of the graph by unioning together the bounds of the individual contours
-    if ( !CGRectEqualToRect(_bounds, CGRectZero) )
+    if ( !MWRectEqualToRect(_bounds, MWRectZeroMake()) )
         return _bounds;
     if ( [_contours count] == 0 )
-        return CGRectZero;
+        return MWRectZeroMake();
     
     for (FBBezierContour *contour in _contours)
-        _bounds = CGRectUnion(_bounds, contour.bounds);
+        _bounds = MWRectFromCGRect( CGRectUnion( MWRectToCGRect(_bounds), MWRectToCGRect(contour.bounds) ) );
     
     return _bounds;
 }
@@ -629,8 +635,8 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     //  Otherwise it's "outside" of the graph and creates a filled region.
     
     // Create the line from the first point in the contour to outside the graph
-    CGPoint testPoint = testContour.firstPoint;
-    CGPoint lineEndPoint = CGPointMake(testPoint.x > CGRectGetMinX(self.bounds) ? CGRectGetMinX(self.bounds) - 10 : CGRectGetMaxX(self.bounds) + 10, testPoint.y); /* just move us outside the bounds of the graph */
+    MWPoint testPoint = testContour.firstPoint;
+    MWPoint lineEndPoint = MWPointMake(testPoint.x > MWRectGetMinX(self.bounds) ? MWRectGetMinX(self.bounds) - 10 : MWRectGetMaxX(self.bounds) + 10, testPoint.y); /* just move us outside the bounds of the graph */
     FBBezierCurve *testCurve = [FBBezierCurve bezierCurveWithLineStartPoint:testPoint endPoint:lineEndPoint];
 
     NSUInteger intersectCount = 0;
@@ -673,7 +679,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     //  of potentially enclosing contours down to 1 or 0. Most times the first ray will find the correct answer, but in some degenerate
     //  cases it will take a few iterations.
     
-    static const CGFloat FBRayOverlap = 10.0;
+    static const MWFloat FBRayOverlap = 10.0;
     
     // In the beginning all our contours are possible containers for the test contour.
     NSMutableArray *containers = [_contours mutableCopy];
@@ -681,15 +687,15 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     // Each time through the loop we split the test contour into any increasing amount of pieces
     //  (halves, thirds, quarters, etc) and send a ray along the boundaries. In order to increase
     //  our changes of eliminate all but 1 of the contours, we do both horizontal and vertical rays.
-    NSUInteger count = MAX(ceilf(CGRectGetWidth(testContour.bounds)), ceilf(CGRectGetHeight(testContour.bounds)));
+    NSUInteger count = MAX(ceil(MWRectGetWidth(testContour.bounds)), ceil(MWRectGetHeight(testContour.bounds)));
     for (NSUInteger fraction = 2; fraction <= count; fraction++) {
         BOOL didEliminate = NO;
         
         // Send the horizontal rays through the test contour and (possibly) through parts of the graph
-        CGFloat verticalSpacing = CGRectGetHeight(testContour.bounds) / (CGFloat)fraction;
-        for (CGFloat y = CGRectGetMinY(testContour.bounds) + verticalSpacing; y < CGRectGetMaxY(testContour.bounds); y += verticalSpacing) {
+        MWFloat verticalSpacing = MWRectGetHeight(testContour.bounds) / (MWFloat)fraction;
+        for (MWFloat y = MWRectGetMinY(testContour.bounds) + verticalSpacing; y < MWRectGetMaxY(testContour.bounds); y += verticalSpacing) {
             // Construct a line that will reach outside both ends of both the test contour and graph
-            FBBezierCurve *ray = [FBBezierCurve bezierCurveWithLineStartPoint:CGPointMake(MIN(CGRectGetMinX(self.bounds), CGRectGetMinX(testContour.bounds)) - FBRayOverlap, y) endPoint:CGPointMake(MAX(CGRectGetMaxX(self.bounds), CGRectGetMaxX(testContour.bounds)) + FBRayOverlap, y)];
+            FBBezierCurve *ray = [FBBezierCurve bezierCurveWithLineStartPoint:MWPointMake(MIN(MWRectGetMinX(self.bounds), MWRectGetMinX(testContour.bounds)) - FBRayOverlap, y) endPoint:MWPointMake(MAX(MWRectGetMaxX(self.bounds), MWRectGetMaxX(testContour.bounds)) + FBRayOverlap, y)];
             // Eliminate any contours that aren't containers. It's possible for this method to fail, so check the return
             BOOL eliminated = [self eliminateContainers:containers thatDontContainContour:testContour usingRay:ray];
             if ( eliminated )
@@ -697,10 +703,10 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
         }
 
         // Send the vertical rays through the test contour and (possibly) through parts of the graph
-        CGFloat horizontalSpacing = CGRectGetWidth(testContour.bounds) / (CGFloat)fraction;
-        for (CGFloat x = CGRectGetMinX(testContour.bounds) + horizontalSpacing; x < CGRectGetMaxX(testContour.bounds); x += horizontalSpacing) {
+        MWFloat horizontalSpacing = MWRectGetWidth(testContour.bounds) / (MWFloat)fraction;
+        for (MWFloat x = MWRectGetMinX(testContour.bounds) + horizontalSpacing; x < MWRectGetMaxX(testContour.bounds); x += horizontalSpacing) {
             // Construct a line that will reach outside both ends of both the test contour and graph
-            FBBezierCurve *ray = [FBBezierCurve bezierCurveWithLineStartPoint:CGPointMake(x, MIN(CGRectGetMinY(self.bounds), CGRectGetMinY(testContour.bounds)) - FBRayOverlap) endPoint:CGPointMake(x, MAX(CGRectGetMaxY(self.bounds), CGRectGetMaxY(testContour.bounds)) + FBRayOverlap)];
+            FBBezierCurve *ray = [FBBezierCurve bezierCurveWithLineStartPoint:MWPointMake(x, MIN(MWRectGetMinY(self.bounds), MWRectGetMinY(testContour.bounds)) - FBRayOverlap) endPoint:MWPointMake(x, MAX(MWRectGetMaxY(self.bounds), MWRectGetMaxY(testContour.bounds)) + FBRayOverlap)];
             // Eliminate any contours that aren't containers. It's possible for this method to fail, so check the return
             BOOL eliminated = [self eliminateContainers:containers thatDontContainContour:testContour usingRay:ray];
             if ( eliminated )
@@ -722,7 +728,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     return nil;
 }
 
-- (BOOL) findBoundsOfContour:(FBBezierContour *)testContour onRay:(FBBezierCurve *)ray minimum:(CGPoint *)testMinimum maximum:(CGPoint *)testMaximum
+- (BOOL) findBoundsOfContour:(FBBezierContour *)testContour onRay:(FBBezierCurve *)ray minimum:(MWPoint *)testMinimum maximum:(MWPoint *)testMaximum
 {
     // Find the bounds of test contour that lie on ray. Simply intersect the ray with test contour. For a horizontal ray, the minimum is the point
     //  with the lowest x value, the maximum with the highest x value. For a vertical ray, use the high and low y values.
@@ -756,7 +762,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     return YES;
 }
 
-- (BOOL) findCrossingsOnContainers:(NSArray *)containers onRay:(FBBezierCurve *)ray beforeMinimum:(CGPoint)testMinimum afterMaximum:(CGPoint)testMaximum crossingsBefore:(NSMutableArray *)crossingsBeforeMinimum crossingsAfter:(NSMutableArray *)crossingsAfterMaximum
+- (BOOL) findCrossingsOnContainers:(NSArray *)containers onRay:(FBBezierCurve *)ray beforeMinimum:(MWPoint)testMinimum afterMaximum:(MWPoint)testMaximum crossingsBefore:(NSMutableArray *)crossingsBeforeMinimum crossingsAfter:(NSMutableArray *)crossingsAfterMaximum
 {
     // Find intersections where the ray intersects the possible containers, before the minimum point, or after the maximum point. Store these
     //  as FBEdgeCrossings in the out parameters.
@@ -791,7 +797,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
                 // Special case if the bounds are just a point, and this crossing is on that point. In that case
                 //  it could fall on either side, and we'll need to do some special processing on it later. For now,
                 //  remember it, and move on to the next intersection.
-                if ( CGPointEqualToPoint(testMaximum, testMinimum) && CGPointEqualToPoint(testMaximum, intersection.location) ) {
+                if ( MWPointEqualToPoint(testMaximum, testMinimum) && MWPointEqualToPoint(testMaximum, intersection.location) ) {
                     [ambiguousCrossings addObject:crossing];
                     continue;
                 }
@@ -849,7 +855,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     // Start with the first crossing as the minimum value to compare all others with
     NSMutableArray *minimums = [NSMutableArray arrayWithCapacity:[crossings count]];
     FBEdgeCrossing *firstCrossing = [crossings objectAtIndex:0];
-    CGPoint minimum = firstCrossing.location;
+    MWPoint minimum = firstCrossing.location;
     for (FBEdgeCrossing *crossing in crossings) {
         // If the current value is less than the minimum, replace it. If it is equal
         //  to the minimum value, add it to the array.
@@ -887,7 +893,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     // Start with the first crossing as the maximum value to compare all others with
     NSMutableArray *maximums = [NSMutableArray arrayWithCapacity:[crossings count]];
     FBEdgeCrossing *firstCrossing = [crossings objectAtIndex:0];
-    CGPoint maximum = firstCrossing.location;
+    MWPoint maximum = firstCrossing.location;
     for (FBEdgeCrossing *crossing in crossings) {
         // If the current value is greater than the maximum, replace it. If it is equal
         //  to the maximum value, add it to the array.
@@ -916,8 +922,8 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
     // This method attempts to eliminate all or all but one of the containers that might contain test contour, using the ray specified.
     
     // First determine the exterior bounds of testContour on the given ray
-    CGPoint testMinimum = CGPointZero;
-    CGPoint testMaximum = CGPointZero;    
+    MWPoint testMinimum = MWPointZeroMake();
+    MWPoint testMaximum = MWPointZeroMake();    
     BOOL foundBounds = [self findBoundsOfContour:testContour onRay:ray minimum:&testMinimum maximum:&testMaximum];
     if ( !foundBounds)
         return NO;
@@ -1120,7 +1126,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
 {
     // Add a contour to ouselves, and force the bounds to be recalculated
     [_contours addObject:contour];
-    _bounds = CGRectZero;
+    _bounds = MWRectZeroMake();
 }
 
 - (NSArray *) nonintersectingContours
@@ -1138,8 +1144,8 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, CGFloat angle)
 {
     return [NSString stringWithFormat:@"<%@: bounds = (%f, %f)(%f, %f) contours = %@>", 
             NSStringFromClass([self class]), 
-            CGRectGetMinX(self.bounds), CGRectGetMinY(self.bounds),
-            CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds),
+            MWRectGetMinX(self.bounds), MWRectGetMinY(self.bounds),
+            MWRectGetWidth(self.bounds), MWRectGetHeight(self.bounds),
             FBArrayDescription(_contours)];
 }
 

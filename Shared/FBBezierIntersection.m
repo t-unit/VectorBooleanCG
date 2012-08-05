@@ -8,7 +8,7 @@
 
 #import "FBBezierIntersection.h"
 #import "FBBezierCurve.h"
-#import "Geometry.h"
+#import "FBGeometry.h"
 
 @interface FBBezierIntersection ()
 {
@@ -30,12 +30,12 @@
 @synthesize curve2LeftBezier = _curve2LeftBezier;
 @synthesize curve2RightBezier = _curve2RightBezier;
 
-+ (id) intersectionWithCurve1:(FBBezierCurve *)curve1 parameter1:(CGFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(CGFloat)parameter2
++ (id) intersectionWithCurve1:(FBBezierCurve *)curve1 parameter1:(MWFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(MWFloat)parameter2
 {
     return [[FBBezierIntersection alloc] initWithCurve1:curve1 parameter1:parameter1 curve2:curve2 parameter2:parameter2];
 }
 
-- (id) initWithCurve1:(FBBezierCurve *)curve1 parameter1:(CGFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(CGFloat)parameter2
+- (id) initWithCurve1:(FBBezierCurve *)curve1 parameter1:(MWFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(MWFloat)parameter2
 {
     self = [super init];
     
@@ -51,7 +51,7 @@
     return self;
 }
 
-- (CGPoint) location
+- (MWPoint) location
 {
     [self computeCurve1];
     return _location;
@@ -66,13 +66,13 @@
     [self computeCurve1];
     [self computeCurve2];
 
-    static const CGFloat FBPointCloseThreshold = 1e-7;
+    static const MWFloat FBPointCloseThreshold = 1e-7;
     
     // Compute the tangents at the intersection. 
-    CGPoint curve1LeftTangent = FBNormalizePoint(FBSubtractPoint(_curve1LeftBezier.controlPoint2, _curve1LeftBezier.endPoint2));
-    CGPoint curve1RightTangent = FBNormalizePoint(FBSubtractPoint(_curve1RightBezier.controlPoint1, _curve1RightBezier.endPoint1));
-    CGPoint curve2LeftTangent = FBNormalizePoint(FBSubtractPoint(_curve2LeftBezier.controlPoint2, _curve2LeftBezier.endPoint2));
-    CGPoint curve2RightTangent = FBNormalizePoint(FBSubtractPoint(_curve2RightBezier.controlPoint1, _curve2RightBezier.endPoint1));
+    MWPoint curve1LeftTangent = FBNormalizePoint(FBSubtractPoint(_curve1LeftBezier.controlPoint2, _curve1LeftBezier.endPoint2));
+    MWPoint curve1RightTangent = FBNormalizePoint(FBSubtractPoint(_curve1RightBezier.controlPoint1, _curve1RightBezier.endPoint1));
+    MWPoint curve2LeftTangent = FBNormalizePoint(FBSubtractPoint(_curve2LeftBezier.controlPoint2, _curve2LeftBezier.endPoint2));
+    MWPoint curve2RightTangent = FBNormalizePoint(FBSubtractPoint(_curve2RightBezier.controlPoint1, _curve2RightBezier.endPoint1));
         
     // See if the tangents are the same. If so, then we're tangent at the intersection point
     return FBArePointsCloseWithOptions(curve1LeftTangent, curve2LeftTangent, FBPointCloseThreshold) || FBArePointsCloseWithOptions(curve1LeftTangent, curve2RightTangent, FBPointCloseThreshold) || FBArePointsCloseWithOptions(curve1RightTangent, curve2LeftTangent, FBPointCloseThreshold) || FBArePointsCloseWithOptions(curve1RightTangent, curve2RightTangent, FBPointCloseThreshold);
