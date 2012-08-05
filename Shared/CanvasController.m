@@ -348,6 +348,7 @@
 
 - (void) addCircleAtPoint:(CGPoint)center withRadius:(CGFloat)radius toPath:(CGMutablePathRef)circle
 {
+    /*
     static const CGFloat FBMagicNumber = 0.55228475;
     CGFloat controlPointLength = radius * FBMagicNumber;
     CGPathMoveToPoint(circle, NULL, center.x - radius, center.y);
@@ -355,9 +356,10 @@
     CGPathAddCurveToPoint(circle, NULL, center.x + controlPointLength, center.y + radius, center.x + radius, center.y + controlPointLength, center.x + radius, center.y);
     CGPathAddCurveToPoint(circle, NULL, center.x + radius, center.y - controlPointLength, center.x + controlPointLength, center.y - radius, center.x, center.y - radius);
     CGPathAddCurveToPoint(circle, NULL, center.x - controlPointLength, center.y - radius, center.x - radius, center.y - controlPointLength, center.x - radius, center.y);
+     */
     
-    //MWRect rect = MWRectMake(center.x - radius, center.y - radius, 2.0 * radius, 2.0 * radius);
-    //CGPathAddEllipseInRect(circle, NULL, rect);
+    CGRect rect = CGRectMake(center.x - radius, center.y - radius, 2.0 * radius, 2.0 * radius);
+    CGPathAddEllipseInRect(circle, NULL, rect);
 }
 
 - (void) addTriangle:(CGPoint)point1 point2:(CGPoint)point2 point3:(CGPoint)point3 toPath:(CGMutablePathRef)path
