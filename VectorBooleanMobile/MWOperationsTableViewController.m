@@ -42,7 +42,7 @@
         previousRowCount += [tableView numberOfRowsInSection:sectionIndex];
     }
     
-    FBOperationTag tag = previousRowCount + indexPath.row;
+    FBOperationTag tag = (FBOperationTag)(previousRowCount + indexPath.row);
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(performOperationForTag:)])
     {
