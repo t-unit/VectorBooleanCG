@@ -8,12 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class CanvasView;
-
-@interface MyDocument : NSDocument {
-    IBOutlet CanvasView *_view;
-    SEL _resetAction;
-}
+@interface MyDocument : NSDocument
 
 - (IBAction) onReset:(id)sender;
 - (IBAction) onUnion:(id)sender;
@@ -21,26 +16,7 @@
 - (IBAction) onDifference:(id)sender; // Punch
 - (IBAction) onJoin:(id)sender; // XOR
 
-- (IBAction) onCircleOverlappingRectangle:(id)sender;
-- (IBAction) onCircleInRectangle:(id)sender;
-- (IBAction) onRectangleInCircle:(id)sender;
-- (IBAction) onCircleOnRectangle:(id)sender;
-- (IBAction) onRectangleWithHoleOverlappingRectangle:(id)sender;
-- (IBAction) onTwoRectanglesOverlappingCircle:(id)sender;
-- (IBAction) onCircleOverlappingCircle:(id)sender;
-- (IBAction) onComplexShapes:(id)sender;
-- (IBAction) onComplexShapes2:(id)sender;
-- (IBAction) onTriangleInsideRectangle:(id)sender;
-- (IBAction) onDiamondOverlappingRectangle:(id)sender;
-- (IBAction) onDiamondInsideRectangle:(id)sender;
-- (IBAction) onNonOverlappingContours:(id)sender;
-- (IBAction) onMoreNonOverlappingContours:(id)sender;
-- (IBAction) onConcentricContours:(id)sender;
-- (IBAction) onMoreConcentricContours:(id)sender;
-- (IBAction) onCircleOverlappingHole:(id)sender;
-- (IBAction) onHoleOverlappingHole:(id)sender;
-- (IBAction) onCurvyShapeOverlappingRectangle:(id)sender;
-
+- (IBAction) onSelectShapes:(id)sender;
 - (IBAction) onShowPoints:(id)sender;
 - (IBAction) onShowIntersections:(id)sender;
 

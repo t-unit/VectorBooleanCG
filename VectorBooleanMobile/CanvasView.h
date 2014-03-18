@@ -10,8 +10,8 @@
 
 @class Canvas;
 
-// This is the view for use on OS X.
-@interface CanvasView : NSView
+// This is the view for use on iOS.
+@interface CanvasView : UIView
 
 @property (readonly) Canvas *canvas;
 

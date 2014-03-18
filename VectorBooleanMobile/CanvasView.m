@@ -13,8 +13,6 @@
 
 @implementation CanvasView
 
-// On 64-bit, NSRect is typedef’d to CGRect anyway.
-
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -31,7 +29,7 @@
 
 - (void)drawRect:(CGRect)dirtyRect
 {
-    CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+    CGContextRef context = UIGraphicsGetCurrentContext();
     [_canvas drawRect:dirtyRect inContext:context];
 }
 
