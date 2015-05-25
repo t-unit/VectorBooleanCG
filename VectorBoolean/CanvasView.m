@@ -15,7 +15,7 @@
 
 // On 64-bit, NSRect is typedef’d to CGRect anyway.
 
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {

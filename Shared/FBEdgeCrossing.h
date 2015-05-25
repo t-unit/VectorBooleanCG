@@ -20,8 +20,8 @@
     FBBezierIntersection *_intersection;
 }
 
-+ (id) crossingWithIntersection:(FBBezierIntersection *)intersection;
-- (id) initWithIntersection:(FBBezierIntersection *)intersection;
++ (instancetype) crossingWithIntersection:(FBBezierIntersection *)intersection;
+- (instancetype) initWithIntersection:(FBBezierIntersection *)intersection NS_DESIGNATED_INITIALIZER;
 
 - (void) removeFromEdge;
 

@@ -13,12 +13,12 @@
 
 @implementation FBEdgeCrossing
 
-+ (id) crossingWithIntersection:(FBBezierIntersection *)intersection
++ (instancetype) crossingWithIntersection:(FBBezierIntersection *)intersection
 {
     return [[FBEdgeCrossing alloc] initWithIntersection:intersection];
 }
 
-- (id) initWithIntersection:(FBBezierIntersection *)intersection
+- (instancetype) initWithIntersection:(FBBezierIntersection *)intersection
 {
     self = [super init];
     
@@ -44,7 +44,7 @@
     if ( _index >= ([self.edge.crossings count] - 1) )
         return nil;
     
-    return [self.edge.crossings objectAtIndex:_index + 1];
+    return (self.edge.crossings)[_index + 1];
 }
 
 - (FBEdgeCrossing *) previous
@@ -52,7 +52,7 @@
     if ( _index == 0 )
         return nil;
     
-    return [self.edge.crossings objectAtIndex:_index - 1];
+    return (self.edge.crossings)[_index - 1];
 }
 
 - (MWFloat) parameter

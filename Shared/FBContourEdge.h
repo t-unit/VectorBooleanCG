@@ -16,7 +16,7 @@
 //  on the curve where crossings happen.
 @interface FBContourEdge : NSObject
 
-- (id) initWithBezierCurve:(FBBezierCurve *)curve contour:(FBBezierContour *)contour;
+- (instancetype) initWithBezierCurve:(FBBezierCurve *)curve contour:(FBBezierContour *)contour NS_DESIGNATED_INITIALIZER;
 
 @property (readonly) FBBezierCurve *curve;
 @property (readonly) NSMutableArray *crossings; // sorted by parameter of the intersection

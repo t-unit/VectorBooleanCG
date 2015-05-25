@@ -10,7 +10,7 @@
 
 @interface MWPointValue : NSObject
 
-- (id)initWithPoint:(MWPoint)point;
-- (MWPoint)point;
+- (instancetype)initWithPoint:(MWPoint)point NS_DESIGNATED_INITIALIZER;
+@property (readonly) MWPoint point;
 
 @end

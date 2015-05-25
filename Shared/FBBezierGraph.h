@@ -17,15 +17,17 @@
     MWRect _bounds;
 }
 
-+ (id) bezierGraph;
-+ (id) bezierGraphWithBezierPath:(CGPathRef)path;
-- (id) initWithBezierPath:(CGPathRef)path;
++ (instancetype) bezierGraph;
++ (instancetype) bezierGraphWithBezierPath:(CGPathRef)path;
+- (instancetype) initWithBezierPath:(CGPathRef)path NS_DESIGNATED_INITIALIZER;
+
+- (instancetype) init NS_DESIGNATED_INITIALIZER;
 
 - (FBBezierGraph *) unionWithBezierGraph:(FBBezierGraph *)graph;
 - (FBBezierGraph *) intersectWithBezierGraph:(FBBezierGraph *)graph;
 - (FBBezierGraph *) differenceWithBezierGraph:(FBBezierGraph *)graph;
 - (FBBezierGraph *) xorWithBezierGraph:(FBBezierGraph *)graph;
 
-- (CGPathRef) newBezierPath;
+@property (readonly) CGPathRef newBezierPath CF_RETURNS_RETAINED;
 
 @end

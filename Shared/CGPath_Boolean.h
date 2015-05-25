@@ -20,22 +20,22 @@
 CGPathRef CGPath_FBCreateUnion (
     CGPathRef path,
     CGPathRef otherPath
-);
+) CF_RETURNS_RETAINED;
 
 CGPathRef CGPath_FBCreateIntersect (
     CGPathRef path,
     CGPathRef otherPath
-);
+) CF_RETURNS_RETAINED;
 
 CGPathRef CGPath_FBCreateDifference (
     CGPathRef path,
     CGPathRef otherPath
-);
+) CF_RETURNS_RETAINED;
 
 CGPathRef CGPath_FBCreateXOR (
     CGPathRef path,
     CGPathRef otherPath
-);
+) CF_RETURNS_RETAINED;
 
 
 #endif

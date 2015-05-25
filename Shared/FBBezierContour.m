@@ -18,7 +18,7 @@
 @synthesize edges=_edges;
 @synthesize inside=_inside;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if ( self != nil ) {
@@ -96,7 +96,7 @@
         return MWRectZeroMake();
     
     // Start with the first point to set the topLeft and bottom right points
-    FBContourEdge *firstEdge = [_edges objectAtIndex:0];
+    FBContourEdge *firstEdge = _edges[0];
     MWPoint topLeft = firstEdge.curve.endPoint1;
     MWPoint bottomRight = topLeft;
     
@@ -123,7 +123,7 @@
     if ( [_edges count] == 0 )
         return MWPointZeroMake();
 
-    FBContourEdge *edge = [_edges objectAtIndex:0];
+    FBContourEdge *edge = _edges[0];
     return edge.curve.endPoint1;
 }
 
@@ -156,7 +156,7 @@
     // When marking we need to start at a point that is clearly either inside or outside
     //  the other graph, otherwise we could mark the crossings exactly opposite of what
     //  they're supposed to be.
-    FBContourEdge *startEdge = [self.edges objectAtIndex:0];
+    FBContourEdge *startEdge = (self.edges)[0];
     FBContourEdge *stopValue = startEdge;
     while ( startEdge.isStartShared ) {
         startEdge = startEdge.next;

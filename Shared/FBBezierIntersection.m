@@ -30,12 +30,12 @@
 @synthesize curve2LeftBezier = _curve2LeftBezier;
 @synthesize curve2RightBezier = _curve2RightBezier;
 
-+ (id) intersectionWithCurve1:(FBBezierCurve *)curve1 parameter1:(MWFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(MWFloat)parameter2
++ (instancetype) intersectionWithCurve1:(FBBezierCurve *)curve1 parameter1:(MWFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(MWFloat)parameter2
 {
     return [[FBBezierIntersection alloc] initWithCurve1:curve1 parameter1:parameter1 curve2:curve2 parameter2:parameter2];
 }
 
-- (id) initWithCurve1:(FBBezierCurve *)curve1 parameter1:(MWFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(MWFloat)parameter2
+- (instancetype) initWithCurve1:(FBBezierCurve *)curve1 parameter1:(MWFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(MWFloat)parameter2
 {
     self = [super init];
     

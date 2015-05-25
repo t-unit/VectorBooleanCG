@@ -15,7 +15,7 @@ NSString *FBArrayDescription(NSArray *array)
     for (NSUInteger i = 0; i < [array count]; i++) {
         if ( i == 0 )
             [description appendString:@"\n"];
-        [description appendFormat:@"\t%llu\t=\t%@\n", (u_int64_t)i, [array objectAtIndex:i]];
+        [description appendFormat:@"\t%llu\t=\t%@\n", (u_int64_t)i, array[i]];
     }
     [description appendString:@"]"];
     return description;

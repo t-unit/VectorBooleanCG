@@ -18,7 +18,7 @@
     FBShapesTag _resetTag;
 }
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {

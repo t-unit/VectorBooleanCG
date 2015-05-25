@@ -30,7 +30,7 @@ static CGRect BoxFrame(CGPoint point)
 @synthesize showPoints=_showPoints;
 @synthesize showIntersections=_showIntersections;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {
@@ -47,7 +47,7 @@ static CGRect BoxFrame(CGPoint point)
 
 - (void) addPath:(CGPathRef)path withColor:(CGColorRef)color
 {
-    NSDictionary *object = [NSDictionary dictionaryWithObjectsAndKeys:(__bridge id)(path), @"path", color, @"color", nil];
+    NSDictionary *object = @{@"path": (__bridge id)(path), (id)@"color": (__bridge id)color};
     [_paths addObject:object];
 }
 
@@ -58,8 +58,8 @@ static CGRect BoxFrame(CGPoint point)
 
 - (CGPathRef) pathAtIndex:(NSUInteger)index
 {
-    NSDictionary *object = [_paths objectAtIndex:index];
-    return (__bridge CGPathRef)([object objectForKey:@"path"]);
+    NSDictionary *object = _paths[index];
+    return (__bridge CGPathRef)(object[@"path"]);
 }
 
 - (void) clear
@@ -82,8 +82,8 @@ static CGRect BoxFrame(CGPoint point)
     
     // Draw on the objects
     for (NSDictionary *object in _paths) {
-        CGColorRef color = (__bridge CGColorRef)([object objectForKey:@"color"]);
-        CGPathRef path = (__bridge CGPathRef)([object objectForKey:@"path"]);
+        CGColorRef color = (__bridge CGColorRef)(object[@"color"]);
+        CGPathRef path = (__bridge CGPathRef)(object[@"path"]);
         CGContextSetFillColorWithColor(context, color);
         CGContextAddPath(context, path);
 
@@ -100,7 +100,7 @@ static CGRect BoxFrame(CGPoint point)
         CGContextSetLineJoin(context, kCGLineJoinMiter);
 
         for (NSDictionary *object in _paths) {
-            CGPathRef path = (__bridge CGPathRef)([object objectForKey:@"path"]);
+            CGPathRef path = (__bridge CGPathRef)(object[@"path"]);
             
             NSUInteger elementCount = CGPath_MWElementCount(path);
             for (NSInteger i = 0; i < elementCount; i++) {
@@ -118,8 +118,8 @@ static CGRect BoxFrame(CGPoint point)
 
     // If we have exactly two objects, show where they intersect
     if ( _showIntersections && [_paths count] == 2 ) {
-        CGPathRef path1 = (__bridge CGPathRef)([[_paths objectAtIndex:0] objectForKey:@"path"]);
-        CGPathRef path2 = (__bridge CGPathRef)([[_paths objectAtIndex:1] objectForKey:@"path"]);
+        CGPathRef path1 = (__bridge CGPathRef)(_paths[0][@"path"]);
+        CGPathRef path2 = (__bridge CGPathRef)(_paths[1][@"path"]);
         NSArray *curves1 = [FBBezierCurve bezierCurvesFromBezierPath:path1];
         NSArray *curves2 = [FBBezierCurve bezierCurvesFromBezierPath:path2];
         

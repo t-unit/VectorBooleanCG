@@ -19,8 +19,8 @@
 - (void) addPath:(CGPathRef)path withColor:(CGColorRef)color;
 - (void) clear;
 
-- (NSUInteger) numberOfPaths;
-- (CGPathRef) pathAtIndex:(NSUInteger)index;
+@property (readonly) NSUInteger numberOfPaths;
+- (CGPathRef) pathAtIndex:(NSUInteger)index CF_RETURNS_NOT_RETAINED;
 
 - (void) drawRect:(CGRect)dirtyRect inContext:(CGContextRef)context;
 

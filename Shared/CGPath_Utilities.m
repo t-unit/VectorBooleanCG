@@ -31,14 +31,14 @@ FBBezierElement CGPath_FBElementAtIndex ( CGPathRef path, NSUInteger index )
     
     // Note: Apparently, subscripting does not work with mutable collections
     // in iOS 5 (it does in iOS 6).
-    NSNumber *typeNumber = [dictionary objectForKey:@"type"];
+    NSNumber *typeNumber = dictionary[@"type"];
     if (!typeNumber)
     {
         return element;
     }
     
     element.kind = (CGPathElementType)[typeNumber intValue];
-    CGPoint *points = (CGPoint *)[(NSData *)[dictionary objectForKey:@"points"] bytes];
+    CGPoint *points = (CGPoint *)[(NSData *)dictionary[@"points"] bytes];
 
     switch (element.kind) {
         case kCGPathElementMoveToPoint:
@@ -132,12 +132,12 @@ void CGPath_FBAppendElement ( CGMutablePathRef path, FBBezierElement element )
 void CGPath_MWElementAtIndex_ApplierFunction ( void *info, const CGPathElement *element )
 {
     NSMutableDictionary *dictionary = (__bridge NSMutableDictionary *)info;
-    NSUInteger currentIndex = [[dictionary objectForKey:@"currentIndex"] unsignedIntegerValue];
-    NSUInteger targetIndex = [[dictionary objectForKey:@"targetIndex"] unsignedIntegerValue];
+    NSUInteger currentIndex = [dictionary[@"currentIndex"] unsignedIntegerValue];
+    NSUInteger targetIndex = [dictionary[@"targetIndex"] unsignedIntegerValue];
 
     if (targetIndex != currentIndex)
     {
-        [dictionary setObject:@( currentIndex + 1 ) forKey:@"currentIndex"];
+        dictionary[@"currentIndex"] = @( currentIndex + 1 );
         return;
     }
     
@@ -177,10 +177,10 @@ void CGPath_MWElementAtIndex_ApplierFunction ( void *info, const CGPathElement *
                                         length:(pointCount * sizeof(CGPoint))];
     
     // Package type and points.
-    [dictionary setObject:@( type ) forKey:@"type"];
-    [dictionary setObject:pointsData forKey:@"points"];
+    dictionary[@"type"] = @( type );
+    dictionary[@"points"] = pointsData;
 
-    [dictionary setObject:@( currentIndex + 1 ) forKey:@"currentIndex"];
+    dictionary[@"currentIndex"] = @( currentIndex + 1 );
 }
 
 

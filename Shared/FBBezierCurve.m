@@ -160,7 +160,7 @@ static MWPoint BezierWithPoints(NSUInteger degree, MWPoint *bezierPoints, MWFloa
 
 - (FBRange) clipWithFatLine:(FBNormalizedLine)fatLine bounds:(FBRange)bounds;
 - (NSArray *) splitCurveAtParameter:(MWFloat)t;
-- (NSArray *) convexHull;
+@property (readonly, copy) NSArray *convexHull;
 - (FBBezierCurve *) bezierClipWithBezierCurve:(FBBezierCurve *)curve original:(FBBezierCurve *)originalCurve rangeOfOriginal:(FBRange *)originalRange intersects:(BOOL *)intersects;
 - (NSArray *) intersectionsWithBezierCurve:(FBBezierCurve *)curve usRange:(FBRange *)usRange themRange:(FBRange *)themRange originalUs:(FBBezierCurve *)originalUs originalThem:(FBBezierCurve *)originalThem;
 - (MWFloat) refineParameter:(MWFloat)parameter forPoint:(MWPoint)point;
@@ -224,17 +224,17 @@ static MWPoint BezierWithPoints(NSUInteger degree, MWPoint *bezierPoints, MWFloa
     return bezierCurves;
 }
 
-+ (id) bezierCurveWithLineStartPoint:(MWPoint)startPoint endPoint:(MWPoint)endPoint
++ (instancetype) bezierCurveWithLineStartPoint:(MWPoint)startPoint endPoint:(MWPoint)endPoint
 {
     return [[FBBezierCurve alloc] initWithLineStartPoint:startPoint endPoint:endPoint];
 }
 
-+ (id) bezierCurveWithEndPoint1:(MWPoint)endPoint1 controlPoint1:(MWPoint)controlPoint1 controlPoint2:(MWPoint)controlPoint2 endPoint2:(MWPoint)endPoint2
++ (instancetype) bezierCurveWithEndPoint1:(MWPoint)endPoint1 controlPoint1:(MWPoint)controlPoint1 controlPoint2:(MWPoint)controlPoint2 endPoint2:(MWPoint)endPoint2
 {
     return [[FBBezierCurve alloc] initWithEndPoint1:endPoint1 controlPoint1:controlPoint1 controlPoint2:controlPoint2 endPoint2:endPoint2];
 }
 
-- (id) initWithEndPoint1:(MWPoint)endPoint1 controlPoint1:(MWPoint)controlPoint1 controlPoint2:(MWPoint)controlPoint2 endPoint2:(MWPoint)endPoint2
+- (instancetype) initWithEndPoint1:(MWPoint)endPoint1 controlPoint1:(MWPoint)controlPoint1 controlPoint2:(MWPoint)controlPoint2 endPoint2:(MWPoint)endPoint2
 {
     self = [super init];
     
@@ -248,7 +248,7 @@ static MWPoint BezierWithPoints(NSUInteger degree, MWPoint *bezierPoints, MWFloa
     return self;
 }
 
-- (id) initWithLineStartPoint:(MWPoint)startPoint endPoint:(MWPoint)endPoint
+- (instancetype) initWithLineStartPoint:(MWPoint)startPoint endPoint:(MWPoint)endPoint
 {
     self = [super init];
     
@@ -308,7 +308,7 @@ static MWPoint BezierWithPoints(NSUInteger degree, MWPoint *bezierPoints, MWFloa
 
         if ( !intersects )
         {
-            return [NSArray array]; // If they don't intersect at all stop now
+            return @[]; // If they don't intersect at all stop now
         }
 
         // Remove the range of them that doesn't intersect with us
@@ -316,7 +316,7 @@ static MWPoint BezierWithPoints(NSUInteger degree, MWPoint *bezierPoints, MWFloa
         
         if ( !intersects )
         {
-            return [NSArray array];  // If they don't intersect at all stop now
+            return @[];  // If they don't intersect at all stop now
         }
         
         // If either curve has been reduced to a point, stop now even if the range hasn't properly converged. Once curves become points, the math
@@ -400,7 +400,7 @@ static MWPoint BezierWithPoints(NSUInteger degree, MWPoint *bezierPoints, MWFloa
     
     // Return the final intersection, which we represent by the original curves and the parameters where they intersect. The parameter values are useful
     //  later in the boolean operations, plus it allows us to do lazy calculations.
-    return [NSArray arrayWithObject:[FBBezierIntersection intersectionWithCurve1:originalUs parameter1:usRange->minimum curve2:originalThem parameter2:themRange->minimum]];
+    return @[[FBBezierIntersection intersectionWithCurve1:originalUs parameter1:usRange->minimum curve2:originalThem parameter2:themRange->minimum]];
 }
 
 - (FBBezierCurve *) bezierClipWithBezierCurve:(FBBezierCurve *)curve original:(FBBezierCurve *)originalCurve rangeOfOriginal:(FBRange *)originalRange intersects:(BOOL *)intersects
@@ -522,8 +522,8 @@ static MWPoint BezierWithPoints(NSUInteger degree, MWPoint *bezierPoints, MWFloa
     for (NSUInteger i = 0; i < [convexHull count]; i++) {
         // Pull out the current line on the convex hull
         NSUInteger indexOfNext = i < ([convexHull count] - 1) ? i + 1 : 0;
-        MWPoint startPoint = [(MWPointValue *)[convexHull objectAtIndex:i] point];
-        MWPoint endPoint = [(MWPointValue *)[convexHull objectAtIndex:indexOfNext] point];
+        MWPoint startPoint = [(MWPointValue *)convexHull[i] point];
+        MWPoint endPoint = [(MWPointValue *)convexHull[indexOfNext] point];
         MWPoint intersectionPoint = MWPointZeroMake();
         
         // See if the segment of the convex hull intersects with the minimum fat line bounds
@@ -569,13 +569,13 @@ static MWPoint BezierWithPoints(NSUInteger degree, MWPoint *bezierPoints, MWFloa
     // Return a bezier curve representing the parameter range specified. We do this by splitting
     //  twice: once on the minimum, the splitting the result of that on the maximum.
     NSArray *curves1 = [self splitCurveAtParameter:range.minimum];
-    FBBezierCurve *upperCurve = [curves1 objectAtIndex:1];
+    FBBezierCurve *upperCurve = curves1[1];
     if ( range.minimum == 1.0 )
         return upperCurve; // avoid the divide by zero below
     // We need to adjust the maximum parameter to fit on the new curve before we split again
     MWFloat adjustedMaximum = (range.maximum - range.minimum) / (1.0 - range.minimum);
     NSArray *curves2 = [upperCurve splitCurveAtParameter:adjustedMaximum];
-    return [curves2 objectAtIndex:0];
+    return curves2[0];
 }
 
 - (MWPoint) pointAtParameter:(MWFloat)parameter leftBezierCurve:(FBBezierCurve **)leftBezierCurve rightBezierCurve:(FBBezierCurve **)rightBezierCurve
@@ -649,7 +649,7 @@ static MWPoint BezierWithPoints(NSUInteger degree, MWPoint *bezierPoints, MWFloa
     FBBezierCurve *leftCurve = nil;
     FBBezierCurve *rightCurve = nil;
     [self pointAtParameter:parameter leftBezierCurve:&leftCurve rightBezierCurve:&rightCurve];
-    return [NSArray arrayWithObjects:leftCurve, rightCurve, nil];
+    return @[leftCurve, rightCurve];
 }
 
 - (NSArray *) convexHull
@@ -673,9 +673,9 @@ static MWPoint BezierWithPoints(NSUInteger degree, MWPoint *bezierPoints, MWFloa
 
     // First, find the point that is on the bottom right, and move it to the first position in our array.
     NSUInteger lowestIndex = 0;
-    MWPoint lowestValue = [(MWPointValue *)[points objectAtIndex:0] point];
+    MWPoint lowestValue = [(MWPointValue *)points[0] point];
     for (NSUInteger i = 0; i < [points count]; i++) {
-        MWPoint point = [(MWPointValue *)[points objectAtIndex:i] point];
+        MWPoint point = [(MWPointValue *)points[i] point];
         if ( point.y < lowestValue.y || (point.y == lowestValue.y && point.x > lowestValue.x) ) {
             lowestIndex = i;
             lowestValue = point;
@@ -734,8 +734,8 @@ static MWPoint BezierWithPoints(NSUInteger degree, MWPoint *bezierPoints, MWFloa
     //  If it causes the results array to turn right, then remove the top of the results stack
     //  and try the point at i again.
     NSMutableArray *results = [NSMutableArray arrayWithCapacity:4];
-    [results addObject:[points objectAtIndex:0]];
-    [results addObject:[points objectAtIndex:1]];
+    [results addObject:points[0]];
+    [results addObject:points[1]];
     NSUInteger i = 2;
     NSUInteger pointsCount = [points count];
 
@@ -743,13 +743,13 @@ static MWPoint BezierWithPoints(NSUInteger degree, MWPoint *bezierPoints, MWFloa
         // TODO: sometimes there is only one point left in results, which leads to a crash. This never happens on OS X!
 
         MWPoint lastPoint = [(MWPointValue *)[results lastObject] point];
-        MWPoint nextToLastPoint = [(MWPointValue *)[results objectAtIndex:[results count] - 2] point];
-        MWPoint pointUnderConsideration = [(MWPointValue *)[points objectAtIndex:i] point];
+        MWPoint nextToLastPoint = [(MWPointValue *)results[[results count] - 2] point];
+        MWPoint pointUnderConsideration = [(MWPointValue *)points[i] point];
         MWFloat area = CounterClockwiseTurn(nextToLastPoint, lastPoint, pointUnderConsideration);
 
         if ( area > 0.0 ) {
             // Turning left is good, so keep going
-            [results addObject:[points objectAtIndex:i]];
+            [results addObject:points[i]];
             i++;
         } else {
             // Turning right is bad, so remove the top point

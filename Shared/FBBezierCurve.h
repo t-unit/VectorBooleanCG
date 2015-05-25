@@ -31,11 +31,11 @@ extern MWFloat FBRangeScaleNormalizedValue(FBRange range, MWFloat value);
 
 + (NSArray *) bezierCurvesFromBezierPath:(CGPathRef)path;
 
-+ (id) bezierCurveWithLineStartPoint:(MWPoint)startPoint endPoint:(MWPoint)endPoint;
-+ (id) bezierCurveWithEndPoint1:(MWPoint)endPoint1 controlPoint1:(MWPoint)controlPoint1 controlPoint2:(MWPoint)controlPoint2 endPoint2:(MWPoint)endPoint2;
++ (instancetype) bezierCurveWithLineStartPoint:(MWPoint)startPoint endPoint:(MWPoint)endPoint;
++ (instancetype) bezierCurveWithEndPoint1:(MWPoint)endPoint1 controlPoint1:(MWPoint)controlPoint1 controlPoint2:(MWPoint)controlPoint2 endPoint2:(MWPoint)endPoint2;
 
-- (id) initWithEndPoint1:(MWPoint)endPoint1 controlPoint1:(MWPoint)controlPoint1 controlPoint2:(MWPoint)controlPoint2 endPoint2:(MWPoint)endPoint2;
-- (id) initWithLineStartPoint:(MWPoint)startPoint endPoint:(MWPoint)endPoint;
+- (instancetype) initWithEndPoint1:(MWPoint)endPoint1 controlPoint1:(MWPoint)controlPoint1 controlPoint2:(MWPoint)controlPoint2 endPoint2:(MWPoint)endPoint2 NS_DESIGNATED_INITIALIZER;
+- (instancetype) initWithLineStartPoint:(MWPoint)startPoint endPoint:(MWPoint)endPoint NS_DESIGNATED_INITIALIZER;
 
 @property MWPoint endPoint1;
 @property MWPoint controlPoint1;

@@ -98,16 +98,16 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, MWFloat angle)
 - (void) removeDuplicateCrossings;
 - (BOOL) doesEdge:(FBContourEdge *)edge1 crossEdge:(FBContourEdge *)edge2 atIntersection:(FBBezierIntersection *)intersection;
 - (void) insertCrossingsWithBezierGraph:(FBBezierGraph *)other;
-- (FBEdgeCrossing *) firstUnprocessedCrossing;
+@property (readonly, strong) FBEdgeCrossing *firstUnprocessedCrossing;
 - (void) markCrossingsAsEntryOrExitWithBezierGraph:(FBBezierGraph *)otherGraph markInside:(BOOL)markInside;
-- (FBBezierGraph *) bezierGraphFromIntersections;
+@property (readonly, strong) FBBezierGraph *bezierGraphFromIntersections;
 - (void) removeCrossings;
 
 - (void) addContour:(FBBezierContour *)contour;
 - (void) round;
 - (FBContourInside) contourInsides:(FBBezierContour *)contour;
 
-- (NSArray *) nonintersectingContours;
+@property (readonly, copy) NSArray *nonintersectingContours;
 - (BOOL) containsContour:(FBBezierContour *)contour;
 - (FBBezierContour *) containerForContour:(FBBezierContour *)testContour;
 - (BOOL) eliminateContainers:(NSMutableArray *)containers thatDontContainContour:(FBBezierContour *)testContour usingRay:(FBBezierCurve *)ray;
@@ -130,17 +130,17 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, MWFloat angle)
 
 @synthesize contours=_contours;
 
-+ (id) bezierGraphWithBezierPath:(CGPathRef)path
++ (instancetype) bezierGraphWithBezierPath:(CGPathRef)path
 {
     return [[FBBezierGraph alloc] initWithBezierPath:path];
 }
 
-+ (id) bezierGraph
++ (instancetype) bezierGraph
 {
     return [[FBBezierGraph alloc] init];
 }
 
-- (id) initWithBezierPath:(CGPathRef)path
+- (instancetype) initWithBezierPath:(CGPathRef)path
 {
     self = [super init];
     
@@ -194,7 +194,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, MWFloat angle)
                     // blow up the clipping code.
                     
                     if ([[contour edges] count]) {
-                        FBContourEdge *firstEdge = [[contour edges] objectAtIndex:0];
+                        FBContourEdge *firstEdge = [contour edges][0];
                         MWPoint        firstPoint = [[firstEdge curve] endPoint1];
                         
                         // Skip degenerate line segments
@@ -221,7 +221,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, MWFloat angle)
     return self;
 }
 
-- (id) init
+- (instancetype) init
 {
     self = [super init];
     
@@ -719,7 +719,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, MWFloat angle)
         // We were able to eliminate someone, and we're down to one, so we're done. If the eliminateContainers: method
         //  failed, we can't make any assumptions about the contains, so just let it go again.
         if ( didEliminate && [containers count] == 1 )
-            return [containers objectAtIndex:0];
+            return containers[0];
     }
 
     // This is a curious case, because by now we've sent rays that went through every integral cordinate of the test contour.
@@ -743,7 +743,7 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, MWFloat angle)
         return NO; // shouldn't happen
     
     // Next go through and find the lowest and highest
-    FBBezierIntersection *firstRayIntersection = [rayIntersections objectAtIndex:0];
+    FBBezierIntersection *firstRayIntersection = rayIntersections[0];
     *testMinimum = firstRayIntersection.location;
     *testMaximum = *testMinimum;    
     for (FBBezierIntersection *intersection in rayIntersections) {
@@ -848,13 +848,13 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, MWFloat angle)
     //  to return more than one crossing if they share the minimum value.
     
     if ( [crossings count] == 0 )
-        return [NSArray array];
+        return @[];
     
     BOOL horizontalRay = ray.endPoint1.y == ray.endPoint2.y; // ray has to be a vertical or horizontal line
     
     // Start with the first crossing as the minimum value to compare all others with
     NSMutableArray *minimums = [NSMutableArray arrayWithCapacity:[crossings count]];
-    FBEdgeCrossing *firstCrossing = [crossings objectAtIndex:0];
+    FBEdgeCrossing *firstCrossing = crossings[0];
     MWPoint minimum = firstCrossing.location;
     for (FBEdgeCrossing *crossing in crossings) {
         // If the current value is less than the minimum, replace it. If it is equal
@@ -886,13 +886,13 @@ static BOOL FBAngleRangeContainsAngle(FBAngleRange range, MWFloat angle)
     //  to return more than one crossing if they share the maximum value.
 
     if ( [crossings count] == 0 )
-        return [NSArray array];
+        return @[];
     
     BOOL horizontalRay = ray.endPoint1.y == ray.endPoint2.y; // ray has to be a vertical or horizontal line
     
     // Start with the first crossing as the maximum value to compare all others with
     NSMutableArray *maximums = [NSMutableArray arrayWithCapacity:[crossings count]];
-    FBEdgeCrossing *firstCrossing = [crossings objectAtIndex:0];
+    FBEdgeCrossing *firstCrossing = crossings[0];
     MWPoint maximum = firstCrossing.location;
     for (FBEdgeCrossing *crossing in crossings) {
         // If the current value is greater than the maximum, replace it. If it is equal

@@ -40,7 +40,7 @@ FBBezierElement CGPath_FBElementAtIndex (
 CGPathRef CGPath_FBCreateSubpathWithRange (
     CGPathRef path,
     NSRange range
-);
+) CF_RETURNS_RETAINED;
 
 
 void CGPath_FBAppendPath (

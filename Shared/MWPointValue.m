@@ -16,19 +16,19 @@
 }
 
 
-- (id)initWithPoint:(MWPoint)point
+- (instancetype)initWithPoint:(MWPoint)point
 {
     self = [super init];
     if (self)
     {
-        _xNumber = [NSNumber numberWithDouble:point.x];
-        _yNumber = [NSNumber numberWithDouble:point.y];
+        _xNumber = @(point.x);
+        _yNumber = @(point.y);
     }
     return self;
 }
 
 
-- (id)init
+- (instancetype)init
 {
     return [self initWithPoint:MWPointZeroMake()];
 }

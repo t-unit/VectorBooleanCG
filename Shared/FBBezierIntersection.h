@@ -15,8 +15,8 @@
 //  the intersection point, if the intersection is tangent. 
 @interface FBBezierIntersection : NSObject
 
-+ (id) intersectionWithCurve1:(FBBezierCurve *)curve1 parameter1:(MWFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(MWFloat)parameter2;
-- (id) initWithCurve1:(FBBezierCurve *)curve1 parameter1:(MWFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(MWFloat)parameter2;
++ (instancetype) intersectionWithCurve1:(FBBezierCurve *)curve1 parameter1:(MWFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(MWFloat)parameter2;
+- (instancetype) initWithCurve1:(FBBezierCurve *)curve1 parameter1:(MWFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(MWFloat)parameter2 NS_DESIGNATED_INITIALIZER;
 
 @property (readonly) MWPoint location;
 @property (readonly, retain) FBBezierCurve *curve1;

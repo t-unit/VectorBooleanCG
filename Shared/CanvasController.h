@@ -13,7 +13,7 @@
 @class Canvas;
 
 
-typedef enum
+typedef NS_ENUM(unsigned int, FBShapesTag)
 {
     FBShapesTagSomeOverlap = 0,
     FBShapesTagCircleInRectangle,
@@ -34,24 +34,24 @@ typedef enum
     FBShapesTagOverlappingHole,
     FBShapesTagHoleOverlappingHole,
     FBShapesTagCurvyShapeOverlappingRectangle
-} FBShapesTag;
+};
 
 
-typedef enum
+typedef NS_ENUM(unsigned int, FBOperationTag)
 {
     FBOperationTagReset = 0,
     FBOperationTagUnion,
     FBOperationTagIntersect,
     FBOperationTagDifference,
     FBOperationTagJoin
-} FBOperationTag;
+};
 
 
-typedef enum
+typedef NS_ENUM(unsigned int, FBOptionTag)
 {
     FBOptionTagToggleControlPoints = 0,
     FBOptionTagToggleIntersections
-} FBOptionTag;
+};
 
 
 @interface CanvasController : NSObject
