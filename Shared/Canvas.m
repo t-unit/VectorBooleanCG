@@ -15,6 +15,7 @@
 
 #if TARGET_OS_IPHONE
 #define COLOR_CLASS     UIColor
+#import <UIKit/UIKit.h>
 #else
 #define COLOR_CLASS     NSColor
 #endif
